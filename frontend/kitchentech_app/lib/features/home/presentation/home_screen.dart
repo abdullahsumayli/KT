@@ -29,10 +29,64 @@ class _HomeScreenState extends State<HomeScreen> {
       'id': '2',
       'title': 'مطبخ عصري تفصيل',
       'city': 'جدة',
-      'price': 3500.0,
+      'price': 35000.0,
       'type': 'تفصيل',
       'aiScore': 8.7,
       'imageUrl': 'https://images.unsplash.com/photo-1556909172-54557c7e4fb7?w=800&h=600&fit=crop',
+    },
+    {
+      'id': '3',
+      'title': 'مطبخ خشبي كلاسيكي',
+      'city': 'الدمام',
+      'price': 38000.0,
+      'type': 'جاهز',
+      'aiScore': 8.5,
+      'imageUrl': 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop',
+    },
+    {
+      'id': '4',
+      'title': 'مطبخ مودرن متكامل',
+      'city': 'الرياض',
+      'price': 52000.0,
+      'type': 'جاهز',
+      'aiScore': 9.5,
+      'imageUrl': 'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=800&h=600&fit=crop',
+    },
+    {
+      'id': '5',
+      'title': 'مطبخ أبيض فاخر',
+      'city': 'مكة',
+      'price': 41000.0,
+      'type': 'تفصيل',
+      'aiScore': 8.9,
+      'imageUrl': 'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&h=600&fit=crop',
+    },
+    {
+      'id': '6',
+      'title': 'مطبخ رمادي أنيق',
+      'city': 'جدة',
+      'price': 39000.0,
+      'type': 'جاهز',
+      'aiScore': 8.4,
+      'imageUrl': 'https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?w=800&h=600&fit=crop',
+    },
+    {
+      'id': '7',
+      'title': 'مطبخ عصري بإضاءة LED',
+      'city': 'الخبر',
+      'price': 47000.0,
+      'type': 'تفصيل',
+      'aiScore': 9.1,
+      'imageUrl': 'https://images.unsplash.com/photo-1588854337221-4cf9fa96c527?w=800&h=600&fit=crop',
+    },
+    {
+      'id': '8',
+      'title': 'مطبخ رخام فخم',
+      'city': 'الرياض',
+      'price': 58000.0,
+      'type': 'جاهز',
+      'aiScore': 9.3,
+      'imageUrl': 'https://images.unsplash.com/photo-1600489000022-c2086d79f9d4?w=800&h=600&fit=crop',
     },
   ];
 
@@ -457,12 +511,198 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 32),
+
+            // Footer
+            _buildFooter(),
           ],
         ),
       ),
       floatingActionButton: const ChatFab(),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+    );
+  }
+
+  Widget _buildFooter() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFF1A237E),
+            Color(0xFF0D47A1),
+            Color(0xFF01579B),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              children: [
+                // Logo and Description
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/logo.png',
+                      height: 48,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(width: 12),
+                    const Text(
+                      'KitchenTech',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'منصتك الذكية لبيع وشراء المطابخ',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32),
+
+                // Links Section
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 40,
+                  runSpacing: 24,
+                  children: [
+                    _buildFooterColumn(
+                      'روابط سريعة',
+                      [
+                        'الرئيسية',
+                        'تصفح المطابخ',
+                        'أضف إعلان',
+                        'من نحن',
+                      ],
+                    ),
+                    _buildFooterColumn(
+                      'خدماتنا',
+                      [
+                        'مطابخ جاهزة',
+                        'مطابخ تفصيل',
+                        'توصيات AI',
+                        'استشارات مجانية',
+                      ],
+                    ),
+                    _buildFooterColumn(
+                      'تواصل معنا',
+                      [
+                        'البريد الإلكتروني',
+                        'الهاتف',
+                        'تويتر',
+                        'انستقرام',
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+
+                // Social Media Icons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildSocialIcon(Icons.facebook),
+                    const SizedBox(width: 16),
+                    _buildSocialIcon(Icons.email),
+                    const SizedBox(width: 16),
+                    _buildSocialIcon(Icons.phone),
+                    const SizedBox(width: 16),
+                    _buildSocialIcon(Icons.camera_alt),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          // Bottom Copyright Bar
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.2),
+            ),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '© 2025 KitchenTech. جميع الحقوق محفوظة',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFooterColumn(String title, List<String> items) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 16),
+        ...items.map(
+          (item) => Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(
+              item,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSocialIcon(IconData icon) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Icon(
+        icon,
+        color: Colors.white,
+        size: 20,
+      ),
     );
   }
 }
