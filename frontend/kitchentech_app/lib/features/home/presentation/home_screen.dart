@@ -50,7 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
       'price': 52000.0,
       'type': 'جاهز',
       'aiScore': 9.5,
-      'imageUrl': 'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=800&h=600&fit=crop',
+      'imageUrl':
+          'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=800&h=600&fit=crop',
     },
     {
       'id': '5',
@@ -59,7 +60,8 @@ class _HomeScreenState extends State<HomeScreen> {
       'price': 41000.0,
       'type': 'تفصيل',
       'aiScore': 8.9,
-      'imageUrl': 'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&h=600&fit=crop',
+      'imageUrl':
+          'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&h=600&fit=crop',
     },
     {
       'id': '6',
@@ -77,7 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
       'price': 47000.0,
       'type': 'تفصيل',
       'aiScore': 9.1,
-      'imageUrl': 'https://images.unsplash.com/photo-1588854337221-4cf9fa96c527?w=800&h=600&fit=crop',
+      'imageUrl':
+          'https://images.unsplash.com/photo-1588854337221-4cf9fa96c527?w=800&h=600&fit=crop',
     },
     {
       'id': '8',
@@ -86,7 +89,8 @@ class _HomeScreenState extends State<HomeScreen> {
       'price': 58000.0,
       'type': 'جاهز',
       'aiScore': 9.3,
-      'imageUrl': 'https://images.unsplash.com/photo-1600489000022-c2086d79f9d4?w=800&h=600&fit=crop',
+      'imageUrl':
+          'https://images.unsplash.com/photo-1600489000022-c2086d79f9d4?w=800&h=600&fit=crop',
     },
   ];
 
@@ -343,6 +347,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 32),
 
+            // Ad Banner 1 - Premium Kitchen Deals
+            _buildAdBanner1(),
+            const SizedBox(height: 32),
+
             // AI Recommendation
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -485,6 +493,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 12),
 
+            // First 4 kitchens
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: GridView.builder(
@@ -496,7 +505,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisSpacing: 12,
                   childAspectRatio: 0.75,
                 ),
-                itemCount: featuredKitchens.length,
+                itemCount: 4,
                 itemBuilder: (context, index) {
                   final kitchen = featuredKitchens[index];
                   return KitchenCard(
@@ -511,6 +520,43 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
+            const SizedBox(height: 24),
+
+            // Ad Banner 2
+            _buildAdBanner2(),
+            const SizedBox(height: 24),
+
+            // Remaining kitchens (4-8)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 0.75,
+                ),
+                itemCount: featuredKitchens.length - 4,
+                itemBuilder: (context, index) {
+                  final kitchen = featuredKitchens[index + 4];
+                  return KitchenCard(
+                    id: kitchen['id'],
+                    title: kitchen['title'],
+                    city: kitchen['city'],
+                    price: kitchen['price'],
+                    type: kitchen['type'],
+                    aiScore: kitchen['aiScore'],
+                    imageUrl: kitchen['imageUrl'],
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 32),
+
+            // Ad Banner 3
+            _buildAdBanner3(),
             const SizedBox(height: 32),
 
             // Footer
@@ -520,6 +566,305 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: const ChatFab(),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+    );
+  }
+
+  Widget _buildAdBanner1() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        height: 180,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xFFFFC857),
+              Color(0xFFFFB142),
+              Color(0xFFFF9800),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFFFFC857).withOpacity(0.3),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              left: -20,
+              bottom: -20,
+              child: Icon(
+                Icons.kitchen,
+                size: 150,
+                color: Colors.white.withOpacity(0.1),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: const Text(
+                            'عرض خاص',
+                            style: TextStyle(
+                              color: Color(0xFFFF9800),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        const Text(
+                          'خصم حتى 40%',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            height: 1.2,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'على جميع المطابخ الجاهزة',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.9),
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.arrow_back,
+                                color: Color(0xFFFF9800),
+                                size: 18,
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                'استكشف الآن',
+                                style: TextStyle(
+                                  color: Color(0xFFFF9800),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAdBanner2() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: LinearGradient(
+            colors: [
+              Colors.blue.shade50,
+              Colors.white,
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          border: Border.all(
+            color: const Color(0xFF2962FF).withOpacity(0.2),
+            width: 2,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF2962FF),
+                    Color(0xFF1976D2),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const Icon(
+                Icons.build_circle,
+                size: 40,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const Text(
+                    'خدمة الترك يب والصيانة',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A237E),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'فريق محترف متاح 24/7',
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2962FF).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Text(
+                          'اتصل بنا',
+                          style: TextStyle(
+                            color: Color(0xFF2962FF),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAdBanner3() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        padding: const EdgeInsets.all(28),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xFF1A237E),
+              Color(0xFF283593),
+              Color(0xFF3949AB),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF283593).withOpacity(0.4),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            const Text(
+              'شركاؤنا الموثوقون',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildBrandLogo('ألمنيوم'),
+                _buildBrandLogo('خشب'),
+                _buildBrandLogo('رخام'),
+                _buildBrandLogo('زجاج'),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'أكثر من 500 مطبخ بأعلى جودة',
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.8),
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBrandLogo(String name) {
+    return Container(
+      width: 70,
+      height: 70,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+          ),
+        ],
+      ),
+      child: Center(
+        child: Text(
+          name,
+          style: const TextStyle(
+            color: Color(0xFF1A237E),
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+          ),
+        ),
+      ),
     );
   }
 
