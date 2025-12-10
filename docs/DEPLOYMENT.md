@@ -33,6 +33,7 @@ git push
 ## 🔧 إعدادات GitHub Pages
 
 تأكد من تفعيل GitHub Pages من إعدادات المستودع:
+
 1. اذهب إلى Settings → Pages
 2. اختر Source: Deploy from a branch
 3. اختر Branch: main
