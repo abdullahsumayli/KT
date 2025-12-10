@@ -16,7 +16,7 @@ if (!(Test-Path $docsPath)) {
     New-Item -ItemType Directory -Path $docsPath | Out-Null
 }
 
-Get-ChildItem $docsPath -Exclude "*.md","wireframes" | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+Get-ChildItem $docsPath -Exclude "*.md", "wireframes" | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
 
 $buildWebPath = Join-Path $frontendPath "build\web"
 Copy-Item "$buildWebPath\*" $docsPath -Recurse -Force
