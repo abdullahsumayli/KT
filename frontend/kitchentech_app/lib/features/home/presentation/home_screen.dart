@@ -185,6 +185,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 const SizedBox(height: 32),
+
+                // 6. Footer
+                _buildFooter(),
               ],
             ),
           ),
