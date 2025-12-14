@@ -12,16 +12,16 @@ Backend API endpoints for handling kitchen quote requests from the Flutter Quote
 
 ### Table: `quote_requests`
 
-| Column | Type | Description | Constraints |
-|--------|------|-------------|-------------|
-| `id` | Integer | Primary key | Auto-increment |
-| `style` | Enum | Kitchen style | modern, classic, wood, aluminum |
-| `city` | String(100) | City name | Required, indexed |
-| `phone` | String(20) | Phone number | Required, indexed, 10 digits |
-| `status` | Enum | Request status | new, contacted, quoted, converted, lost |
-| `admin_notes` | Text | Admin notes | Optional |
-| `created_at` | DateTime | Creation timestamp | Auto-generated |
-| `updated_at` | DateTime | Last update | Auto-updated |
+| Column        | Type        | Description        | Constraints                             |
+| ------------- | ----------- | ------------------ | --------------------------------------- |
+| `id`          | Integer     | Primary key        | Auto-increment                          |
+| `style`       | Enum        | Kitchen style      | modern, classic, wood, aluminum         |
+| `city`        | String(100) | City name          | Required, indexed                       |
+| `phone`       | String(20)  | Phone number       | Required, indexed, 10 digits            |
+| `status`      | Enum        | Request status     | new, contacted, quoted, converted, lost |
+| `admin_notes` | Text        | Admin notes        | Optional                                |
+| `created_at`  | DateTime    | Creation timestamp | Auto-generated                          |
+| `updated_at`  | DateTime    | Last update        | Auto-updated                            |
 
 ---
 
@@ -34,6 +34,7 @@ Backend API endpoints for handling kitchen quote requests from the Flutter Quote
 **Rate Limit**: 10 requests per minute per IP
 
 **Request Body**:
+
 ```json
 {
   "style": "modern",
@@ -43,11 +44,13 @@ Backend API endpoints for handling kitchen quote requests from the Flutter Quote
 ```
 
 **Validation Rules**:
+
 - `style`: Must be one of: `modern`, `classic`, `wood`, `aluminum`
 - `city`: Normalized to lowercase, accepts: `riyadh`, `jeddah`, `dammam`, `khobar`, `other`
 - `phone`: Must be exactly 10 digits starting with `05` (Saudi format)
 
 **Response** (201 Created):
+
 ```json
 {
   "id": 1,
@@ -62,6 +65,7 @@ Backend API endpoints for handling kitchen quote requests from the Flutter Quote
 **Error Responses**:
 
 - **400 Bad Request** - Invalid data format
+
 ```json
 {
   "detail": [
@@ -75,6 +79,7 @@ Backend API endpoints for handling kitchen quote requests from the Flutter Quote
 ```
 
 - **409 Conflict** - Duplicate request (same phone within 24 hours)
+
 ```json
 {
   "detail": "A quote request with this phone number already exists within the last 24 hours. Please try again later or contact us directly."
@@ -82,6 +87,7 @@ Backend API endpoints for handling kitchen quote requests from the Flutter Quote
 ```
 
 - **429 Too Many Requests** - Rate limit exceeded
+
 ```json
 {
   "error": "Rate limit exceeded: 10 per 1 minute"
@@ -95,17 +101,20 @@ Backend API endpoints for handling kitchen quote requests from the Flutter Quote
 **Endpoint**: `GET /api/v1/quotes/`
 
 **Query Parameters**:
+
 - `skip` (int, default: 0) - Number of records to skip
 - `limit` (int, default: 100) - Maximum records to return
 - `status_filter` (enum, optional) - Filter by status
 - `city_filter` (string, optional) - Filter by city
 
 **Example**:
+
 ```
 GET /api/v1/quotes/?status_filter=new&city_filter=riyadh&limit=50
 ```
 
 **Response** (200 OK):
+
 ```json
 [
   {
@@ -136,6 +145,7 @@ GET /api/v1/quotes/?status_filter=new&city_filter=riyadh&limit=50
 **Endpoint**: `GET /api/v1/quotes/stats`
 
 **Response** (200 OK):
+
 ```json
 {
   "total": 150,
@@ -170,9 +180,11 @@ GET /api/v1/quotes/?status_filter=new&city_filter=riyadh&limit=50
 **Endpoint**: `GET /api/v1/quotes/{quote_id}`
 
 **Path Parameters**:
+
 - `quote_id` (int) - The ID of the quote request
 
 **Response** (200 OK):
+
 ```json
 {
   "id": 1,
@@ -185,6 +197,7 @@ GET /api/v1/quotes/?status_filter=new&city_filter=riyadh&limit=50
 ```
 
 **Error Response** (404 Not Found):
+
 ```json
 {
   "detail": "Quote request with id 999 not found"
@@ -198,9 +211,11 @@ GET /api/v1/quotes/?status_filter=new&city_filter=riyadh&limit=50
 **Endpoint**: `PATCH /api/v1/quotes/{quote_id}/status`
 
 **Path Parameters**:
+
 - `quote_id` (int) - The ID of the quote request
 
 **Request Body**:
+
 ```json
 {
   "new_status": "contacted",
@@ -209,6 +224,7 @@ GET /api/v1/quotes/?status_filter=new&city_filter=riyadh&limit=50
 ```
 
 **Response** (200 OK):
+
 ```json
 {
   "message": "Quote request status updated successfully",
@@ -232,9 +248,11 @@ GET /api/v1/quotes/?status_filter=new&city_filter=riyadh&limit=50
 **Endpoint**: `DELETE /api/v1/quotes/{quote_id}`
 
 **Path Parameters**:
+
 - `quote_id` (int) - The ID of the quote request to delete
 
 **Response** (200 OK):
+
 ```json
 {
   "message": "Quote request deleted successfully",
@@ -243,6 +261,7 @@ GET /api/v1/quotes/?status_filter=new&city_filter=riyadh&limit=50
 ```
 
 **Error Response** (404 Not Found):
+
 ```json
 {
   "detail": "Quote request with id 999 not found"
@@ -262,6 +281,7 @@ new → contacted → quoted → converted
 ```
 
 **Status Descriptions**:
+
 - `new`: Quote request just received, not yet contacted
 - `contacted`: Customer has been contacted by phone/email
 - `quoted`: Price quote has been provided to customer
@@ -273,14 +293,17 @@ new → contacted → quoted → converted
 ## Rate Limiting
 
 ### Nginx Layer (Server-level)
+
 - Global API: 20 requests/second
 - Auth endpoints: 5 requests/minute
 
 ### Application Layer (FastAPI)
+
 - Quote creation: **10 requests/minute per IP**
 - Auth endpoints: 3-5 requests/minute
 
 ### Cloudflare Edge (if enabled)
+
 - General traffic: 300 requests/minute per IP
 - Auth endpoints: 10 requests/minute per IP
 
@@ -359,6 +382,7 @@ Future<void> _submitForm() async {
 ```
 
 **Required Dependency** (`pubspec.yaml`):
+
 ```yaml
 dependencies:
   http: ^1.1.0
@@ -371,6 +395,7 @@ dependencies:
 ### Test with cURL
 
 **Create Quote Request**:
+
 ```bash
 curl -X POST https://souqmatbakh.com/api/v1/quotes/ \
   -H "Content-Type: application/json" \
@@ -382,11 +407,13 @@ curl -X POST https://souqmatbakh.com/api/v1/quotes/ \
 ```
 
 **Get Statistics**:
+
 ```bash
 curl https://souqmatbakh.com/api/v1/quotes/stats
 ```
 
 **Test Rate Limiting** (should fail after 10 requests):
+
 ```bash
 for i in {1..15}; do
   curl -X POST https://souqmatbakh.com/api/v1/quotes/ \
@@ -401,6 +428,7 @@ done
 ## Security Considerations
 
 ### ✅ Implemented
+
 - Phone number validation (10 digits, starts with 05)
 - Rate limiting (10 requests/minute)
 - Duplicate detection (24-hour window)
@@ -408,6 +436,7 @@ done
 - CORS restrictions (production domains only)
 
 ### ⚠️ Recommended for Production
+
 1. **Admin Authentication**: Protect GET/PATCH/DELETE endpoints
 2. **SMS Verification**: Verify phone number ownership
 3. **CAPTCHA**: Add reCAPTCHA to prevent bot submissions
@@ -432,6 +461,7 @@ Recommended features for admin panel:
 ## Monitoring & Alerts
 
 ### Log Files
+
 ```bash
 # Application logs
 sudo journalctl -u souqmatbakh-backend -f | grep "quote"
@@ -441,20 +471,21 @@ sudo tail -f /var/log/nginx/souqmatbakh-access.log | grep "quotes"
 ```
 
 ### Database Queries
+
 ```sql
 -- Count new requests today
-SELECT COUNT(*) FROM quote_requests 
-WHERE status = 'new' 
+SELECT COUNT(*) FROM quote_requests
+WHERE status = 'new'
 AND DATE(created_at) = CURRENT_DATE;
 
 -- Most popular kitchen style
-SELECT style, COUNT(*) as count 
-FROM quote_requests 
-GROUP BY style 
+SELECT style, COUNT(*) as count
+FROM quote_requests
+GROUP BY style
 ORDER BY count DESC;
 
 -- Conversion rate
-SELECT 
+SELECT
   COUNT(CASE WHEN status = 'converted' THEN 1 END) * 100.0 / COUNT(*) as conversion_rate
 FROM quote_requests;
 ```
@@ -466,6 +497,7 @@ FROM quote_requests;
 ### Issue: Migration fails
 
 **Solution**:
+
 ```bash
 # Check current migration status
 alembic current
@@ -480,6 +512,7 @@ alembic upgrade head
 ### Issue: Enum creation errors
 
 **Solution**: PostgreSQL enums are persistent. If migration fails, manually drop:
+
 ```sql
 DROP TYPE IF EXISTS kitchenstyle CASCADE;
 DROP TYPE IF EXISTS quoterequeststatus CASCADE;
@@ -490,6 +523,7 @@ Then re-run migration.
 ### Issue: Rate limit too strict
 
 **Solution**: Edit `backend/app/routes/quotes.py`:
+
 ```python
 @limiter.limit("20/minute")  # Increase from 10 to 20
 ```
@@ -498,14 +532,14 @@ Then re-run migration.
 
 ## Files Modified/Created
 
-| File | Type | Description |
-|------|------|-------------|
-| `backend/app/models/quote_request.py` | NEW | Database model |
-| `backend/app/models/__init__.py` | MODIFIED | Added imports |
-| `backend/app/routes/quotes.py` | NEW | API endpoints |
-| `backend/app/main.py` | MODIFIED | Added router |
-| `backend/alembic/versions/add_quote_requests.py` | NEW | Migration script |
-| `lib/widgets/quote_request_form.dart` | MODIFIED | Added API comment |
+| File                                             | Type     | Description       |
+| ------------------------------------------------ | -------- | ----------------- |
+| `backend/app/models/quote_request.py`            | NEW      | Database model    |
+| `backend/app/models/__init__.py`                 | MODIFIED | Added imports     |
+| `backend/app/routes/quotes.py`                   | NEW      | API endpoints     |
+| `backend/app/main.py`                            | MODIFIED | Added router      |
+| `backend/alembic/versions/add_quote_requests.py` | NEW      | Migration script  |
+| `lib/widgets/quote_request_form.dart`            | MODIFIED | Added API comment |
 
 ---
 

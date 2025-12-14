@@ -35,8 +35,7 @@ class Settings(BaseSettings):
         case_sensitive = True
         extra = "ignore"  # Ignore extra fields from .env file
     
-    @property
-    def DEBUG(self) -> bool:
+    def is_debug_mode(self) -> bool:
         """Debug mode is only enabled in dev environment."""
         return self.APP_ENV.lower() == "dev"
     

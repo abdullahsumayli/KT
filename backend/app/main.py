@@ -33,8 +33,8 @@ app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     description="KitchenTech API - Platform for kitchen listings with AI features",
-    docs_url="/docs" if settings.DEBUG else None,  # Disable docs in production
-    redoc_url="/redoc" if settings.DEBUG else None
+    docs_url="/docs" if settings.is_debug_mode() else None,  # Disable docs in production
+    redoc_url="/redoc" if settings.is_debug_mode() else None
 )
 
 # Add rate limiter to app state
@@ -54,7 +54,7 @@ app.add_middleware(
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     """Handle uncaught exceptions - hide details in production."""
-    if settings.DEBUG:
+    if settings.is_debug_mode():
         # In dev, show full error
         raise exc
     else:
@@ -94,9 +94,9 @@ async def startup_event():
     
     logger.info(f"🚀 {settings.APP_NAME} v{settings.APP_VERSION} started!")
     logger.info(f"🌍 Environment: {settings.APP_ENV}")
-    logger.info(f"🔒 Debug mode: {settings.DEBUG}")
+    logger.info(f"🔒 Debug mode: {settings.is_debug_mode()}")
     logger.info(f"🌐 Allowed origins: {settings.allowed_origins_list}")
-    if settings.DEBUG:
+    if settings.is_debug_mode():
         logger.info(f"📚 API Documentation: http://localhost:8000/docs")
 
 
@@ -118,7 +118,7 @@ async def health_check():
         "status": "healthy",
         "app_name": settings.APP_NAME,
         "version": settings.APP_VERSION,
-        "debug_mode": settings.DEBUG
+        "debug_mode": settings.is_debug_mode()
     }
 
 
@@ -128,5 +128,5 @@ if __name__ == "__main__":
         "main:app",
         host="0.0.0.0",
         port=8000,
-        reload=settings.DEBUG
+        reload=settings.is_debug_mode()
     )
