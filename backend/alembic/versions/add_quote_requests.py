@@ -17,60 +17,52 @@ depends_on = None
 
 
 def upgrade():
-    # Create kitchen_style enum using raw SQL to handle checkfirst properly
+    # Create everything using raw SQL to avoid SQLAlchemy's automatic ENUM creation
     op.execute("""
+        -- Create kitchen_style enum if not exists
         DO $$ BEGIN
             CREATE TYPE kitchenstyle AS ENUM ('modern', 'classic', 'wood', 'aluminum');
         EXCEPTION
             WHEN duplicate_object THEN null;
         END $$;
-    """)
-    
-    # Create quote_request_status enum using raw SQL
-    op.execute("""
+        
+        -- Create quote_request_status enum if not exists
         DO $$ BEGIN
             CREATE TYPE quoterequeststatus AS ENUM ('new', 'contacted', 'quoted', 'converted', 'lost');
         EXCEPTION
             WHEN duplicate_object THEN null;
         END $$;
+        
+        -- Create quote_requests table
+        CREATE TABLE IF NOT EXISTS quote_requests (
+            id SERIAL PRIMARY KEY,
+            style kitchenstyle NOT NULL,
+            city VARCHAR(100) NOT NULL,
+            phone VARCHAR(20) NOT NULL,
+            status quoterequeststatus NOT NULL DEFAULT 'new',
+            admin_notes TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        
+        -- Create indexes
+        CREATE INDEX IF NOT EXISTS ix_quote_requests_id ON quote_requests(id);
+        CREATE INDEX IF NOT EXISTS ix_quote_requests_style ON quote_requests(style);
+        CREATE INDEX IF NOT EXISTS ix_quote_requests_city ON quote_requests(city);
+        CREATE INDEX IF NOT EXISTS ix_quote_requests_phone ON quote_requests(phone);
+        CREATE INDEX IF NOT EXISTS ix_quote_requests_created_at ON quote_requests(created_at);
     """)
-    
-    # Create quote_requests table (ENUMs will be referenced by name)
-    kitchen_style_enum = sa.Enum('modern', 'classic', 'wood', 'aluminum', name='kitchenstyle', create_type=False)
-    quote_status_enum = sa.Enum('new', 'contacted', 'quoted', 'converted', 'lost', name='quoterequeststatus', create_type=False)
-    
-    op.create_table(
-        'quote_requests',
-        sa.Column('id', sa.Integer(), nullable=False),
-        sa.Column('style', kitchen_style_enum, nullable=False),
-        sa.Column('city', sa.String(length=100), nullable=False),
-        sa.Column('phone', sa.String(length=20), nullable=False),
-        sa.Column('status', quote_status_enum, nullable=False, server_default='new'),
-        sa.Column('admin_notes', sa.String(), nullable=True),
-        sa.Column('created_at', sa.DateTime(), nullable=True),
-        sa.Column('updated_at', sa.DateTime(), nullable=True),
-        sa.PrimaryKeyConstraint('id')
-    )
-    
-    # Create indexes
-    op.create_index(op.f('ix_quote_requests_id'), 'quote_requests', ['id'], unique=False)
-    op.create_index(op.f('ix_quote_requests_style'), 'quote_requests', ['style'], unique=False)
-    op.create_index(op.f('ix_quote_requests_city'), 'quote_requests', ['city'], unique=False)
-    op.create_index(op.f('ix_quote_requests_phone'), 'quote_requests', ['phone'], unique=False)
-    op.create_index(op.f('ix_quote_requests_created_at'), 'quote_requests', ['created_at'], unique=False)
 
 
 def downgrade():
-    # Drop indexes
-    op.drop_index(op.f('ix_quote_requests_created_at'), table_name='quote_requests')
-    op.drop_index(op.f('ix_quote_requests_phone'), table_name='quote_requests')
-    op.drop_index(op.f('ix_quote_requests_city'), table_name='quote_requests')
-    op.drop_index(op.f('ix_quote_requests_style'), table_name='quote_requests')
-    op.drop_index(op.f('ix_quote_requests_id'), table_name='quote_requests')
-    
-    # Drop table
-    op.drop_table('quote_requests')
-    
-    # Drop enums
-    sa.Enum(name='quoterequeststatus').drop(op.get_bind(), checkfirst=True)
-    sa.Enum(name='kitchenstyle').drop(op.get_bind(), checkfirst=True)
+    # Drop using raw SQL
+    op.execute("""
+        DROP INDEX IF EXISTS ix_quote_requests_created_at;
+        DROP INDEX IF EXISTS ix_quote_requests_phone;
+        DROP INDEX IF EXISTS ix_quote_requests_city;
+        DROP INDEX IF EXISTS ix_quote_requests_style;
+        DROP INDEX IF EXISTS ix_quote_requests_id;
+        DROP TABLE IF EXISTS quote_requests;
+        DROP TYPE IF EXISTS quoterequeststatus;
+        DROP TYPE IF EXISTS kitchenstyle;
+    """)
