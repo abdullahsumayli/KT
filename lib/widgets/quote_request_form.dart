@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../services/quote_api_service.dart';
+
 /// مكون نموذج طلب عرض سعر المطبخ
 /// يدعم RTL واللغة العربية بشكل كامل
+/// متصل بـ API الإنتاج: https://souqmatbakh.com/api/v1/quotes/
 class QuoteRequestForm extends StatefulWidget {
   const QuoteRequestForm({super.key});
 
@@ -77,49 +80,40 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
     });
 
     try {
-      // TODO: استبدل برابط API الحقيقي
-      // const apiUrl = 'https://souqmatbakh.com/api/v1/quotes';
-      
-      // محاكاة إرسال البيانات إلى API
-      await Future.delayed(const Duration(seconds: 1));
-
-      // هيكل البيانات المرسلة
-      final requestData = {
-        'style': _selectedStyle,
-        'city': _selectedCity,
-        'phone': _phoneController.text.trim(),
-      };
-
-      // طباعة البيانات للتطوير (يمكن حذفها في الإنتاج)
-      debugPrint('📤 طلب عرض السعر: $requestData');
-
-      /* 
-      // مثال على استدعاء API الحقيقي:
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(requestData),
+      // إرسال الطلب إلى API الإنتاج
+      final response = await QuoteApiService.submitQuoteRequest(
+        style: _selectedStyle!,
+        city: _selectedCity ?? 'other',
+        phone: QuoteApiService.cleanPhone(_phoneController.text),
       );
 
-      if (response.statusCode != 201) {
-        throw Exception('فشل الإرسال');
-      }
-      */
+      // طباعة البيانات للتطوير
+      debugPrint('✅ تم إنشاء طلب رقم: ${response['id']}');
+      debugPrint(
+        '📤 البيانات المرسلة: ${response['style']}, ${response['city']}, ${response['phone']}',
+      );
 
       // إظهار رسالة نجاح
       if (mounted) {
         _showSnackBar(
-          '✅ تم إرسال طلبك بنجاح! سنتواصل معك خلال 24 ساعة',
+          '✅ تم إرسال طلبك بنجاح! رقم الطلب: ${response['id']}\nسنتواصل معك خلال 24 ساعة',
           isError: false,
         );
 
         // إعادة تعيين النموذج
         _resetForm();
       }
-    } catch (e) {
-      // في حالة حدوث خطأ
+    } on QuoteApiException catch (e) {
+      // معالجة أخطاء API المخصصة
+      debugPrint('❌ خطأ API: ${e.errorCode} - ${e.message}');
       if (mounted) {
-        _showSnackBar('❌ حدث خطأ أثناء الإرسال. الرجاء المحاولة مرة أخرى', isError: true);
+        _showSnackBar('❌ ${e.userFriendlyMessage}', isError: true);
+      }
+    } catch (e) {
+      // معالجة الأخطاء العامة
+      debugPrint('❌ خطأ غير متوقع: $e');
+      if (mounted) {
+        _showSnackBar('❌ حدث خطأ غير متوقع. الرجاء المحاولة مرة أخرى', isError: true);
       }
     } finally {
       // إيقاف حالة التحميل

@@ -62,11 +62,14 @@ lib/widgets/quote_request_form.dart
 
 ### 2. الاستخدام في الكود
 
-#### الطريقة الأساسية (في أي صفحة):
+#### ✅ متصل بـ API الإنتاج
+
+المكون الآن يرسل الطلبات مباشرةً إلى السيرفر على `https://souqmatbakh.com/api/v1/quotes/`:
 
 ```dart
 import 'package:flutter/material.dart';
 import 'widgets/quote_request_form.dart';
+import 'services/quote_api_service.dart'; // ✅ خدمة API الحقيقية
 
 class HomePage extends StatelessWidget {
   @override
@@ -74,10 +77,29 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
-        child: QuoteRequestForm(),
+        child: QuoteRequestForm(), // ✅ متصل تلقائياً بالـ API
       ),
     );
   }
+}
+```
+
+**المميزات الجديدة:**
+
+- ✅ إرسال حقيقي للطلبات إلى قاعدة البيانات PostgreSQL
+- ✅ معالجة أخطاء شاملة (Rate Limiting, Timeout, Validation)
+- ✅ رسائل خطأ واضحة باللغة العربية للمستخدم
+- ✅ Timeout تلقائي بعد 10 ثواني
+- ✅ استجابة تحتوي على رقم الطلب `id` من السيرفر
+- ✅ حماية من تجاوز حد الطلبات (10 طلب/دقيقة)
+
+#### الطريقة الأساسية (Legacy - Mock API):
+
+لتعطيل الـ API الحقيقي واستخدام Mock في Development:
+
+```dart
+// في quote_api_service.dart، غيّر:
+static const String baseUrl = 'http://localhost:8000/api/v1'; // للتطوير المحلي
 }
 ```
 
