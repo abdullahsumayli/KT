@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List, Optional
@@ -82,6 +82,7 @@ class QuoteRequestStats(BaseModel):
 @router.post("/", response_model=QuoteRequestResponse, status_code=status.HTTP_201_CREATED)
 @limiter.limit("10/minute")
 async def create_quote_request(
+    request: Request,
     quote: QuoteRequestCreate,
     db: Session = Depends(get_db)
 ):
