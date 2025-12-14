@@ -342,7 +342,111 @@ sudo systemctl start souqmatbakh-backend
 
 ---
 
-## 📞 Troubleshooting
+## �️ Ops Pack - Production Operations
+
+KitchenTech includes automated operational tools for production monitoring, backups, and self-healing.
+
+### Components Installed
+
+The Ops Pack includes:
+
+1. **Daily Database & Uploads Backup** (03:15 UTC daily)
+   - Automated PostgreSQL dumps with gzip compression
+   - Uploads directory archival (if exists)
+   - 7-day retention policy
+   - Logs: `/var/log/souqmatbakh/backup.log`
+
+2. **API Health Monitoring & Auto-Restart** (every 5 minutes)
+   - Checks frontend and API endpoints
+   - Auto-restarts backend service if API fails
+   - Smart logging (only logs state changes)
+   - Logs: `/var/log/souqmatbakh/healthcheck.log`
+
+3. **Nginx Caching for Flutter Assets**
+   - Immutable assets (JS, CSS, WASM): 1-year cache
+   - Dynamic content (index.html, service worker): no cache
+   - Gzip compression enabled
+
+### Monitoring Commands
+
+Check operational status:
+
+```bash
+# Verify all components running
+sudo bash /var/www/souqmatbakh/deploy/scripts/ops_verify.sh
+
+# Check timer status
+systemctl status souqmatbakh-backup.timer
+systemctl status souqmatbakh-healthcheck.timer
+
+# List all timers
+systemctl list-timers | grep souqmatbakh
+
+# View recent backup logs
+tail -f /var/log/souqmatbakh/backup.log
+
+# View healthcheck logs
+tail -f /var/log/souqmatbakh/healthcheck.log
+
+# Check backup files
+ls -lh /var/backups/souqmatbakh/db/
+ls -lh /var/backups/souqmatbakh/uploads/
+```
+
+### Manual Operations
+
+Trigger manual backup:
+
+```bash
+sudo systemctl start souqmatbakh-backup.service
+```
+
+Trigger manual healthcheck:
+
+```bash
+sudo systemctl start souqmatbakh-healthcheck.service
+```
+
+Restore from backup:
+
+```bash
+# List available backups
+ls -lh /var/backups/souqmatbakh/db/
+
+# Restore database (example)
+sudo systemctl stop souqmatbakh-backend
+gunzip -c /var/backups/souqmatbakh/db/kitchentech_db_20251214_0315.sql.gz | \
+  sudo -u postgres psql -d kitchentech_db
+sudo systemctl start souqmatbakh-backend
+```
+
+### Backup Retention
+
+- **Database**: Last 7 days retained
+- **Uploads**: Last 7 days retained
+- **Location**: `/var/backups/souqmatbakh/{db,uploads}/`
+- **Format**: 
+  - DB: `kitchentech_db_YYYYmmdd_HHMM.sql.gz`
+  - Uploads: `uploads_YYYYmmdd_HHMM.tar.gz`
+
+### Customizing Timers
+
+Edit timer schedules:
+
+```bash
+# Backup timer (default: 03:15 UTC daily)
+sudo systemctl edit souqmatbakh-backup.timer
+
+# Healthcheck timer (default: every 5 minutes)
+sudo systemctl edit souqmatbakh-healthcheck.timer
+
+# After changes, reload
+sudo systemctl daemon-reload
+```
+
+---
+
+## �📞 Troubleshooting
 
 ### Backend won't start
 

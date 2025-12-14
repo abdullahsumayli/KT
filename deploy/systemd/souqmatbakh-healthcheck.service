@@ -1,0 +1,21 @@
+[Unit]
+Description=KitchenTech Health Check and Auto-Restart
+After=network-online.target souqmatbakh-backend.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+ExecStartPre=/bin/mkdir -p /var/log/souqmatbakh
+ExecStart=/var/www/souqmatbakh/deploy/scripts/healthcheck_and_restart.sh
+
+# No output to journal to reduce noise (logs go to file)
+StandardOutput=null
+StandardError=append:/var/log/souqmatbakh/healthcheck.log
+
+# Security
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

@@ -301,6 +301,71 @@ setup_systemd_service() {
     print_success "Systemd service configured"
 }
 
+setup_ops_pack() {
+    print_header "Step 7.5: Installing Ops Pack (Backups, Healthcheck)"
+    
+    # Create log directory if not exists
+    mkdir -p "$LOG_DIR"
+    chown -R www-data:www-data "$LOG_DIR"
+    
+    # Install backup scripts and make executable
+    print_step "Installing backup script..."
+    local backup_script="$BACKEND_DIR/deploy/scripts/backup_postgres_and_uploads.sh"
+    if [[ -f "$backup_script" ]]; then
+        chmod +x "$backup_script"
+        print_success "Backup script installed and executable"
+    else
+        print_warning "Backup script not found: $backup_script"
+    fi
+    
+    # Install healthcheck script and make executable
+    print_step "Installing healthcheck script..."
+    local healthcheck_script="$BACKEND_DIR/deploy/scripts/healthcheck_and_restart.sh"
+    if [[ -f "$healthcheck_script" ]]; then
+        chmod +x "$healthcheck_script"
+        print_success "Healthcheck script installed and executable"
+    else
+        print_warning "Healthcheck script not found: $healthcheck_script"
+    fi
+    
+    # Install backup systemd units
+    print_step "Installing backup service and timer..."
+    local backup_service="$BACKEND_DIR/deploy/systemd/souqmatbakh-backup.service"
+    local backup_timer="$BACKEND_DIR/deploy/systemd/souqmatbakh-backup.timer"
+    
+    if [[ -f "$backup_service" ]] && [[ -f "$backup_timer" ]]; then
+        cp "$backup_service" /etc/systemd/system/
+        cp "$backup_timer" /etc/systemd/system/
+        systemctl daemon-reload
+        systemctl enable --now souqmatbakh-backup.timer
+        print_success "Backup timer enabled (runs daily at 03:15 UTC)"
+    else
+        print_warning "Backup service/timer files not found"
+    fi
+    
+    # Install healthcheck systemd units
+    print_step "Installing healthcheck service and timer..."
+    local healthcheck_service="$BACKEND_DIR/deploy/systemd/souqmatbakh-healthcheck.service"
+    local healthcheck_timer="$BACKEND_DIR/deploy/systemd/souqmatbakh-healthcheck.timer"
+    
+    if [[ -f "$healthcheck_service" ]] && [[ -f "$healthcheck_timer" ]]; then
+        cp "$healthcheck_service" /etc/systemd/system/
+        cp "$healthcheck_timer" /etc/systemd/system/
+        systemctl daemon-reload
+        systemctl enable --now souqmatbakh-healthcheck.timer
+        print_success "Healthcheck timer enabled (runs every 5 minutes)"
+    else
+        print_warning "Healthcheck service/timer files not found"
+    fi
+    
+    # Create backup directories
+    print_step "Creating backup directories..."
+    mkdir -p /var/backups/souqmatbakh/{db,uploads}
+    print_success "Backup directories created"
+    
+    print_success "Ops Pack installation complete"
+}
+
 setup_nginx() {
     print_header "Step 8: Configuring Nginx"
     
@@ -491,6 +556,7 @@ main() {
     setup_python_environment
     run_database_migrations
     setup_systemd_service
+    setup_ops_pack
     setup_nginx
     restart_and_verify_service
     run_health_checks
