@@ -1,0 +1,5 @@
+DROP DATABASE IF EXISTS kitchentech_db;
+DROP USER IF EXISTS ktuser;
+CREATE USER ktuser WITH PASSWORD 'KT_SecureDB_2025_9x7kmPw5nQ';
+CREATE DATABASE kitchentech_db OWNER ktuser;
+GRANT ALL PRIVILEGES ON DATABASE kitchentech_db TO ktuser;

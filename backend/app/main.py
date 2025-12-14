@@ -4,6 +4,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 from pathlib import Path
 import logging
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 from app.core.config import settings
 from app.database import init_db
 from app.routes import auth, listings, ai, images, admin, contact, plans, profile, favorites, settings as settings_routes
@@ -22,6 +25,9 @@ settings.validate_settings()
 MEDIA_DIR = Path("media")
 MEDIA_DIR.mkdir(parents=True, exist_ok=True)
 
+# Initialize rate limiter (slowapi)
+limiter = Limiter(key_func=get_remote_address)
+
 # Initialize FastAPI app
 app = FastAPI(
     title=settings.APP_NAME,
@@ -30,6 +36,10 @@ app = FastAPI(
     docs_url="/docs" if settings.DEBUG else None,  # Disable docs in production
     redoc_url="/redoc" if settings.DEBUG else None
 )
+
+# Add rate limiter to app state
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # CORS middleware - now using environment-configured origins
 app.add_middleware(

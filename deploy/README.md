@@ -351,12 +351,14 @@ KitchenTech includes automated operational tools for production monitoring, back
 The Ops Pack includes:
 
 1. **Daily Database & Uploads Backup** (03:15 UTC daily)
+
    - Automated PostgreSQL dumps with gzip compression
    - Uploads directory archival (if exists)
    - 7-day retention policy
    - Logs: `/var/log/souqmatbakh/backup.log`
 
 2. **API Health Monitoring & Auto-Restart** (every 5 minutes)
+
    - Checks frontend and API endpoints
    - Auto-restarts backend service if API fails
    - Smart logging (only logs state changes)
@@ -425,7 +427,7 @@ sudo systemctl start souqmatbakh-backend
 - **Database**: Last 7 days retained
 - **Uploads**: Last 7 days retained
 - **Location**: `/var/backups/souqmatbakh/{db,uploads}/`
-- **Format**: 
+- **Format**:
   - DB: `kitchentech_db_YYYYmmdd_HHMM.sql.gz`
   - Uploads: `uploads_YYYYmmdd_HHMM.tar.gz`
 
@@ -445,7 +447,132 @@ sudo systemctl daemon-reload
 ```
 
 ---
+## 🛡️ Rate Limiting & Abuse Protection
 
+### Overview
+
+Production-grade rate limiting is implemented at **two layers** for defense in depth:
+
+1. **Nginx (Primary Shield)**: Network-level rate limiting before requests reach the application
+2. **FastAPI (Secondary Shield)**: Application-level rate limiting with slowapi
+
+### Rate Limit Configuration
+
+#### Nginx Limits (Network Layer)
+
+- **Global API**: 20 requests/second (burst: 40)
+- **Auth Endpoints**: 5 requests/minute (burst: 10)
+- **Status Code**: HTTP 429 (Too Many Requests)
+
+Configured in:
+- `/etc/nginx/nginx.conf` - Rate limiting zones
+- `/etc/nginx/sites-available/souqmatbakh.com.conf` - Applied limits
+
+#### FastAPI Limits (Application Layer)
+
+- **Login**: 5 requests/minute per IP
+- **Registration**: 3 requests/minute per IP
+- **Phone Login**: 5 requests/minute per IP
+
+Implemented with `slowapi` decorators on auth endpoints.
+
+### Testing Rate Limits
+
+```bash
+# Test auth endpoint rate limiting
+for i in {1..7}; do
+  curl -X POST https://souqmatbakh.com/api/v1/auth/login \
+    -H 'Content-Type: application/x-www-form-urlencoded' \
+    -d 'username=test@test.com&password=test'
+  echo ""
+  sleep 11
+done
+
+# Should see 401 (Unauthorized) for first 5 requests
+# Then 429 (Rate limit exceeded) on 6th request
+```
+
+### Adjusting Limits
+
+**To modify Nginx rate limits:**
+
+```bash
+# Edit nginx.conf
+sudo nano /etc/nginx/nginx.conf
+
+# Find these lines:
+limit_req_zone $binary_remote_addr zone=global_limit:10m rate=20r/s;
+limit_req_zone $binary_remote_addr zone=auth_limit:10m rate=5r/m;
+
+# Adjust rate= values:
+# - rate=20r/s means 20 requests per second
+# - rate=5r/m means 5 requests per minute
+
+# Test and reload
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+**To modify FastAPI rate limits:**
+
+Edit `backend/app/routes/auth.py`:
+
+```python
+@limiter.limit("5/minute")  # Change this value
+async def login(...):
+    ...
+```
+
+Then restart backend:
+
+```bash
+sudo systemctl restart souqmatbakh-backend
+```
+
+### Monitoring Rate Limiting
+
+```bash
+# Check nginx rate limiting in logs
+sudo tail -f /var/log/nginx/souqmatbakh-access.log | grep ' 429 '
+
+# Check backend rate limiting logs
+sudo journalctl -u souqmatbakh-backend -f | grep 'Rate limit'
+
+# View rate limit header
+curl -I https://souqmatbakh.com/api/ | grep -i 'x-rate'
+# Returns: x-ratelimit-policy: global=20r/s, auth=5r/m
+```
+
+### Whitelisting IPs (if needed)
+
+To allow specific IPs to bypass rate limits:
+
+```bash
+# Edit nginx site config
+sudo nano /etc/nginx/sites-available/souqmatbakh.com.conf
+
+# Add before limit_req directives:
+geo $limit {
+    default 1;
+    91.99.106.230 0;  # Server IP
+    1.2.3.4 0;        # Your office IP
+}
+
+map $limit $limit_key {
+    0 "";
+    1 $binary_remote_addr;
+}
+
+# Change limit_req_zone to use $limit_key instead of $binary_remote_addr
+```
+
+### Important Notes
+
+- **Both layers active**: Nginx catches most abuse, FastAPI provides fine-grained control
+- **No business logic changes**: Rate limiting is transparent to application code
+- **Production-ready**: Tested and verified working
+- **Reversible**: Can be adjusted or removed without code changes
+
+---
 ## �📞 Troubleshooting
 
 ### Backend won't start

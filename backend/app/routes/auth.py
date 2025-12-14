@@ -5,6 +5,8 @@ from pydantic import BaseModel, EmailStr, validator
 from datetime import timedelta
 import logging
 import re
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 from app.database import get_db
 from app.models.user import User
 from app.core.security import (
@@ -17,6 +19,9 @@ from app.core.config import settings
 
 router = APIRouter(prefix="/api/v1/auth", tags=["authentication"])
 logger = logging.getLogger("kitchentech")
+
+# Initialize slowapi limiter for secondary rate limiting
+limiter = Limiter(key_func=get_remote_address)
 
 # Simple in-memory rate limiter for login attempts
 from collections import defaultdict
@@ -98,7 +103,8 @@ class Token(BaseModel):
 
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-async def register(user_data: UserRegister, db: Session = Depends(get_db)):
+@limiter.limit("3/minute")  # Secondary rate limit: 3 registrations per minute per IP
+async def register(request: Request, user_data: UserRegister, db: Session = Depends(get_db)):
     """Register a new user account."""
     
     # Check if user already exists
@@ -137,6 +143,7 @@ class PhoneLoginRequest(BaseModel):
 
 
 @router.post("/login", response_model=Token)
+@limiter.limit("5/minute")  # Secondary rate limit: 5 login attempts per minute per IP
 async def login(
     request: Request,
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -184,6 +191,7 @@ async def login(
 
 
 @router.post("/login/phone", response_model=Token)
+@limiter.limit("5/minute")  # Secondary rate limit: 5 phone login attempts per minute per IP
 async def login_with_phone(
     request: Request,
     credentials: PhoneLoginRequest,

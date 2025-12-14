@@ -1,4 +1,4 @@
-# KitchenTech (souqmatbakh.com) - Nginx Configuration with Rate Limiting
+# KitchenTech (souqmatbakh.com) - Nginx Configuration
 
 # Redirect HTTP to HTTPS
 server {
@@ -27,16 +27,23 @@ server {
     # SSL Configuration
     ssl_certificate /etc/letsencrypt/live/souqmatbakh.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/souqmatbakh.com/privkey.pem;
-
+    
     # SSL Security Settings
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
-
-    # HSTS
+    
+    # HSTS (optional but recommended)
     add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    
+    # Security Headers
+    add_header X-Frame-Options "DENY" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "geolocation=(), microphone=(), camera=()" always;
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:;" always;
 
     # Frontend (Flutter Web)
     root /var/www/souqmatbakh/frontend;
@@ -45,20 +52,10 @@ server {
     # Client max body size (for file uploads)
     client_max_body_size 10M;
 
-    # Global rate limiting for all requests (20 req/sec)
-    limit_req zone=global_limit burst=40 nodelay;
-    
-    # Auth rate limiting (5 req/min)
-    limit_req zone=auth_limit burst=10 nodelay;
-    limit_req_status 429;
-
-    # Rate limit policy header
-    add_header X-RateLimit-Policy "global=20r/s, auth=5r/m" always;
-
     # Backend API Proxy
     location /api/ {
-        proxy_pass http://127.0.0.1:8000/api/;
-
+        proxy_pass http://127.0.0.1:8000/;
+        
         # Proxy headers
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -66,17 +63,17 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Port $server_port;
-
+        
         # Timeouts
         proxy_connect_timeout 60s;
         proxy_send_timeout 60s;
         proxy_read_timeout 60s;
-
+        
         # Buffering
         proxy_buffering off;
         proxy_request_buffering off;
-
-        # WebSocket support
+        
+        # WebSocket support (if needed in future)
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
