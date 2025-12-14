@@ -11,6 +11,7 @@
 ## ✨ المميزات الرئيسية
 
 ### 1. التصميم العصري (Modern UI/UX)
+
 - ✅ Card بزوايا دائرية وظلال ناعمة
 - ✅ Header بـ gradient أزرق جذاب
 - ✅ Segmented buttons لاختيار نوع المطبخ (بدون dropdown)
@@ -18,28 +19,32 @@
 - ✅ زر CTA بلون ذهبي/أصفر يجذب الانتباه
 
 ### 2. دعم كامل للعربية
+
 - ✅ RTL (Right-to-Left) افتراضي
 - ✅ جميع النصوص بالعربية
 - ✅ جاهز لخطوط عربية (Tajawal، Cairo)
 - ✅ تنسيق مناسب لأرقام الهواتف العربية
 
 ### 3. التحقق الذكي (Smart Validation)
+
 - ✅ التحقق من رقم الجوال (10 أرقام، يبدأ بـ 05)
 - ✅ التأكد من اختيار نوع المطبخ
 - ✅ التأكد من اختيار المدينة
 - ✅ رسائل خطأ واضحة بالعربية
 
 ### 4. إدارة الحالة (State Management)
+
 - ✅ Loading state مع CircularProgressIndicator
 - ✅ تعطيل الزر أثناء الإرسال
 - ✅ SnackBar للنجاح/الفشل
 - ✅ إعادة تعيين النموذج تلقائياً بعد النجاح
 
 ### 5. هيكل البيانات (Data Structure)
+
 ```json
 {
-  "style": "modern",      // modern | classic | wood | aluminum
-  "city": "riyadh",       // riyadh | jeddah | dammam | other
+  "style": "modern", // modern | classic | wood | aluminum
+  "city": "riyadh", // riyadh | jeddah | dammam | other
   "phone": "05xxxxxxxx"
 }
 ```
@@ -49,6 +54,7 @@
 ## 🚀 التثبيت والاستخدام
 
 ### 1. نسخ الملف
+
 ```bash
 # الملف موجود في:
 lib/widgets/quote_request_form.dart
@@ -57,6 +63,7 @@ lib/widgets/quote_request_form.dart
 ### 2. الاستخدام في الكود
 
 #### الطريقة الأساسية (في أي صفحة):
+
 ```dart
 import 'package:flutter/material.dart';
 import 'widgets/quote_request_form.dart';
@@ -75,12 +82,14 @@ class HomePage extends StatelessWidget {
 ```
 
 #### الطريقة مع Demo كامل:
+
 ```bash
 # ملف Demo جاهز للاختبار:
 lib/main_quote_demo.dart
 ```
 
 لتشغيل الـ Demo:
+
 ```bash
 flutter run -t lib/main_quote_demo.dart
 ```
@@ -90,6 +99,7 @@ flutter run -t lib/main_quote_demo.dart
 ## 📱 مكونات الواجهة (UI Components)
 
 ### 1. Header (الرأس)
+
 ```dart
 Container(
   decoration: BoxDecoration(
@@ -107,19 +117,23 @@ Container(
 ```
 
 ### 2. Kitchen Style Selector (محدد نوع المطبخ)
+
 4 خيارات رئيسية:
+
 - 🏢 مودرن (Modern)
 - 🪑 كلاسيك (Classic)
 - 🌲 خشب طبيعي (Wood)
 - 🔧 ألمنيوم / صاج (Aluminum)
 
 **التفاعل**:
+
 - Click على الخيار لتحديده
 - تغيير اللون إلى أزرق فاتح عند التحديد
 - ظهور علامة ✓ على الخيار المحدد
 - Animation سلس عند التبديل
 
 ### 3. City Dropdown (قائمة المدن)
+
 ```dart
 DropdownButtonFormField<String>(
   items: [
@@ -133,6 +147,7 @@ DropdownButtonFormField<String>(
 ```
 
 ### 4. Phone Field (حقل الجوال)
+
 ```dart
 TextFormField(
   keyboardType: TextInputType.phone,
@@ -145,6 +160,7 @@ TextFormField(
 ```
 
 ### 5. Submit Button (زر الإرسال)
+
 ```dart
 ElevatedButton(
   style: ElevatedButton.styleFrom(
@@ -161,6 +177,7 @@ ElevatedButton(
 ## 🔧 التخصيص (Customization)
 
 ### 1. تغيير الألوان
+
 ```dart
 // في _buildHeader():
 gradient: LinearGradient(
@@ -172,6 +189,7 @@ backgroundColor: Colors.green[600],  // مثال: أخضر
 ```
 
 ### 2. إضافة/تعديل خيارات المطابخ
+
 ```dart
 final List<Map<String, dynamic>> _kitchenStyles = [
   {
@@ -189,6 +207,7 @@ final List<Map<String, dynamic>> _kitchenStyles = [
 ```
 
 ### 3. إضافة/تعديل المدن
+
 ```dart
 final List<Map<String, String>> _cities = [
   {'id': 'riyadh', 'label': 'الرياض'},
@@ -198,6 +217,7 @@ final List<Map<String, String>> _cities = [
 ```
 
 ### 4. تعديل validation رقم الجوال
+
 ```dart
 String? _validatePhone(String? value) {
   // مثال: قبول أرقام تبدأ بـ 05 أو 966
@@ -249,10 +269,11 @@ Future<void> _submitForm() async {
 ```
 
 **Dependencies المطلوبة**:
+
 ```yaml
 # pubspec.yaml
 dependencies:
-  http: ^1.1.0  # للـ API calls
+  http: ^1.1.0 # للـ API calls
 ```
 
 ---
@@ -260,6 +281,7 @@ dependencies:
 ## 📊 استخدام البيانات (Data Usage)
 
 ### هيكل البيانات المرسلة:
+
 ```dart
 final requestData = {
   'style': 'modern',       // ID نوع المطبخ
@@ -269,6 +291,7 @@ final requestData = {
 ```
 
 ### مثال: حفظ في قاعدة بيانات محلية (SQLite):
+
 ```dart
 // في _submitForm():
 await DatabaseHelper.instance.insertQuote({
@@ -280,6 +303,7 @@ await DatabaseHelper.instance.insertQuote({
 ```
 
 ### مثال: إرسال إلى Firebase:
+
 ```dart
 // في _submitForm():
 await FirebaseFirestore.instance.collection('quotes').add({
@@ -295,6 +319,7 @@ await FirebaseFirestore.instance.collection('quotes').add({
 ## 🧪 الاختبار (Testing)
 
 ### 1. اختبار UI (Widget Test):
+
 ```dart
 // test/quote_request_form_test.dart
 void main() {
@@ -328,13 +353,13 @@ void main() {
 
 ### 2. سيناريوهات الاختبار اليدوي:
 
-| الاختبار | الخطوات | النتيجة المتوقعة |
-|---------|---------|------------------|
-| **Validation** | ضغط "إرسال" بدون ملء الحقول | ظهور رسائل خطأ بالعربية |
-| **Style Selection** | اختيار نوع المطبخ | تغيير اللون + علامة ✓ |
-| **Phone Format** | إدخال رقم بـ 9 أرقام | رسالة خطأ "رقم غير صحيح" |
-| **Loading State** | ضغط "إرسال" مع بيانات صحيحة | ظهور Spinner + تعطيل الزر |
-| **Success** | إتمام الإرسال بنجاح | SnackBar أخضر + إعادة تعيين |
+| الاختبار            | الخطوات                     | النتيجة المتوقعة            |
+| ------------------- | --------------------------- | --------------------------- |
+| **Validation**      | ضغط "إرسال" بدون ملء الحقول | ظهور رسائل خطأ بالعربية     |
+| **Style Selection** | اختيار نوع المطبخ           | تغيير اللون + علامة ✓       |
+| **Phone Format**    | إدخال رقم بـ 9 أرقام        | رسالة خطأ "رقم غير صحيح"    |
+| **Loading State**   | ضغط "إرسال" مع بيانات صحيحة | ظهور Spinner + تعطيل الزر   |
+| **Success**         | إتمام الإرسال بنجاح         | SnackBar أخضر + إعادة تعيين |
 
 ---
 
@@ -347,6 +372,7 @@ void main() {
 - ✅ **Orientation**: Portrait & Landscape
 
 ### اختبر على أحجام شاشات مختلفة:
+
 ```bash
 # Mobile (صغير)
 flutter run --device-id=<mobile_device>
@@ -363,6 +389,7 @@ flutter run -d macos  # أو windows / linux
 ## 🎨 التحسينات الاختيارية
 
 ### 1. إضافة Animations أكثر سلاسة:
+
 ```dart
 // في _buildKitchenStyleSelector():
 AnimatedContainer(
@@ -373,6 +400,7 @@ AnimatedContainer(
 ```
 
 ### 2. Haptic Feedback عند الضغط:
+
 ```dart
 import 'package:flutter/services.dart';
 
@@ -384,6 +412,7 @@ onTap: () {
 ```
 
 ### 3. Field Focus Management:
+
 ```dart
 // إضافة FocusNode لكل حقل
 final _cityFocus = FocusNode();
@@ -394,6 +423,7 @@ onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_phoneFocus),
 ```
 
 ### 4. تحليلات (Analytics):
+
 ```dart
 // في _submitForm():
 FirebaseAnalytics.instance.logEvent(
@@ -409,22 +439,24 @@ FirebaseAnalytics.instance.logEvent(
 
 ## 📚 الملفات ذات الصلة
 
-| الملف | الوصف |
-|------|-------|
-| [`lib/widgets/quote_request_form.dart`](lib/widgets/quote_request_form.dart) | المكون الرئيسي |
-| [`lib/main_quote_demo.dart`](lib/main_quote_demo.dart) | Demo كامل للمكون |
-| `lib/main.dart` | (استخدم QuoteRequestForm في الصفحة الرئيسية) |
+| الملف                                                                        | الوصف                                        |
+| ---------------------------------------------------------------------------- | -------------------------------------------- |
+| [`lib/widgets/quote_request_form.dart`](lib/widgets/quote_request_form.dart) | المكون الرئيسي                               |
+| [`lib/main_quote_demo.dart`](lib/main_quote_demo.dart)                       | Demo كامل للمكون                             |
+| `lib/main.dart`                                                              | (استخدم QuoteRequestForm في الصفحة الرئيسية) |
 
 ---
 
 ## 🤝 المساهمة والدعم
 
 ### الإبلاغ عن مشاكل:
+
 - تأكد من إصدار Flutter (`flutter --version`)
 - وصف المشكلة بوضوح
 - أرفق screenshots إن أمكن
 
 ### طلبات التحسين:
+
 - اقتراحات UI/UX
 - ميزات جديدة
 - تحسينات الأداء

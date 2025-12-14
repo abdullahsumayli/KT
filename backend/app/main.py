@@ -9,7 +9,7 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from app.core.config import settings
 from app.database import init_db
-from app.routes import auth, listings, ai, images, admin, contact, plans, profile, favorites, settings as settings_routes
+from app.routes import auth, listings, ai, images, admin, contact, plans, profile, favorites, settings as settings_routes, quotes
 
 # Configure logging
 logging.basicConfig(
@@ -75,6 +75,7 @@ app.include_router(ai.router)
 app.include_router(images.router)
 app.include_router(admin.router)
 app.include_router(contact.router)
+app.include_router(quotes.router)
 app.include_router(plans.router)
 app.include_router(profile.router)
 app.include_router(favorites.router)

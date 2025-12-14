@@ -6,6 +6,7 @@ from app.models.favorite import Favorite
 from app.models.plan import Plan, PlanType
 from app.models.subscription import Subscription, SubscriptionStatus, PaymentStatus
 from app.models.contact_message import ContactMessage, ContactMessageType, ContactMessageStatus
+from app.models.quote_request import QuoteRequest, KitchenStyle, QuoteRequestStatus
 from app.models.site_setting import SiteSetting
 
 __all__ = [
@@ -16,5 +17,6 @@ __all__ = [
     "Plan", "PlanType",
     "Subscription", "SubscriptionStatus", "PaymentStatus",
     "ContactMessage", "ContactMessageType", "ContactMessageStatus",
+    "QuoteRequest", "KitchenStyle", "QuoteRequestStatus",
     "SiteSetting"
 ]

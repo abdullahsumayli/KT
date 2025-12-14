@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'widgets/quote_request_form.dart';
 
 void main() {
@@ -31,10 +32,7 @@ class QuoteRequestFormDemo extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text(
-          'نموذج طلب عرض السعر',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: const Text('نموذج طلب عرض السعر', style: TextStyle(fontWeight: FontWeight.bold)),
         centerTitle: true,
         backgroundColor: Colors.blue[700],
         foregroundColor: Colors.white,
@@ -45,12 +43,12 @@ class QuoteRequestFormDemo extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            
+
             // المكون الرئيسي
             const QuoteRequestForm(),
-            
+
             const SizedBox(height: 40),
-            
+
             // معلومات إضافية
             Container(
               padding: const EdgeInsets.all(20),
@@ -83,57 +81,32 @@ class QuoteRequestFormDemo extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  _buildInfoItem(
-                    '✅',
-                    'تحويل الزوار إلى عملاء محتملين بشكل فعال',
-                  ),
-                  _buildInfoItem(
-                    '📊',
-                    'جمع بيانات العملاء لتحليل الطلب والسوق',
-                  ),
-                  _buildInfoItem(
-                    '🎯',
-                    'توفير تجربة مستخدم سلسة وجذابة',
-                  ),
-                  _buildInfoItem(
-                    '⚡',
-                    'استجابة سريعة مع حالة تحميل واضحة',
-                  ),
-                  _buildInfoItem(
-                    '🛡️',
-                    'تحقق من صحة البيانات قبل الإرسال',
-                  ),
+                  _buildInfoItem('✅', 'تحويل الزوار إلى عملاء محتملين بشكل فعال'),
+                  _buildInfoItem('📊', 'جمع بيانات العملاء لتحليل الطلب والسوق'),
+                  _buildInfoItem('🎯', 'توفير تجربة مستخدم سلسة وجذابة'),
+                  _buildInfoItem('⚡', 'استجابة سريعة مع حالة تحميل واضحة'),
+                  _buildInfoItem('🛡️', 'تحقق من صحة البيانات قبل الإرسال'),
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
-  
+
   Widget _buildInfoItem(String emoji, String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            emoji,
-            style: const TextStyle(fontSize: 20),
-          ),
+          Text(emoji, style: const TextStyle(fontSize: 20)),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.grey[700],
-                height: 1.5,
-              ),
-            ),
+            child: Text(text, style: TextStyle(fontSize: 15, color: Colors.grey[700], height: 1.5)),
           ),
         ],
       ),

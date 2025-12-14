@@ -21,26 +21,10 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
 
   // خيارات أنواع المطابخ
   final List<Map<String, dynamic>> _kitchenStyles = [
-    {
-      'id': 'modern',
-      'label': 'مودرن',
-      'icon': Icons.architecture,
-    },
-    {
-      'id': 'classic',
-      'label': 'كلاسيك',
-      'icon': Icons.chair,
-    },
-    {
-      'id': 'wood',
-      'label': 'خشب طبيعي',
-      'icon': Icons.forest,
-    },
-    {
-      'id': 'aluminum',
-      'label': 'ألمنيوم / صاج',
-      'icon': Icons.construction,
-    },
+    {'id': 'modern', 'label': 'مودرن', 'icon': Icons.architecture},
+    {'id': 'classic', 'label': 'كلاسيك', 'icon': Icons.chair},
+    {'id': 'wood', 'label': 'خشب طبيعي', 'icon': Icons.forest},
+    {'id': 'aluminum', 'label': 'ألمنيوم / صاج', 'icon': Icons.construction},
   ];
 
   // خيارات المدن
@@ -93,6 +77,9 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
     });
 
     try {
+      // TODO: استبدل برابط API الحقيقي
+      // const apiUrl = 'https://souqmatbakh.com/api/v1/quotes';
+      
       // محاكاة إرسال البيانات إلى API
       await Future.delayed(const Duration(seconds: 1));
 
@@ -105,6 +92,19 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
 
       // طباعة البيانات للتطوير (يمكن حذفها في الإنتاج)
       debugPrint('📤 طلب عرض السعر: $requestData');
+
+      /* 
+      // مثال على استدعاء API الحقيقي:
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(requestData),
+      );
+
+      if (response.statusCode != 201) {
+        throw Exception('فشل الإرسال');
+      }
+      */
 
       // إظهار رسالة نجاح
       if (mounted) {
@@ -119,10 +119,7 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
     } catch (e) {
       // في حالة حدوث خطأ
       if (mounted) {
-        _showSnackBar(
-          '❌ حدث خطأ أثناء الإرسال. الرجاء المحاولة مرة أخرى',
-          isError: true,
-        );
+        _showSnackBar('❌ حدث خطأ أثناء الإرسال. الرجاء المحاولة مرة أخرى', isError: true);
       }
     } finally {
       // إيقاف حالة التحميل
@@ -151,16 +148,11 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
         content: Text(
           message,
           textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         backgroundColor: isError ? Colors.red[700] : Colors.green[700],
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         duration: const Duration(seconds: 4),
         margin: const EdgeInsets.all(16),
       ),
@@ -174,9 +166,7 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
       child: Card(
         elevation: 8,
         shadowColor: Colors.black26,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -256,11 +246,7 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
           // النص الفرعي
           Text(
             'أكمل النموذج واحصل على 3 عروض أسعار تنافسية من أفضل المصانع',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.white.withOpacity(0.95),
-              height: 1.5,
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.95), height: 1.5),
             textAlign: TextAlign.center,
           ),
         ],
@@ -272,11 +258,7 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-        color: Colors.grey[800],
-      ),
+      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[800]),
     );
   }
 
@@ -296,10 +278,7 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
           },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(
-              vertical: 16,
-              horizontal: 20,
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
             decoration: BoxDecoration(
               color: isSelected ? Colors.blue[100] : Colors.grey[100],
               border: Border.all(
@@ -327,11 +306,7 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
                 ),
                 if (isSelected) ...[
                   const SizedBox(width: 8),
-                  Icon(
-                    Icons.check_circle,
-                    color: Colors.blue[700],
-                    size: 20,
-                  ),
+                  Icon(Icons.check_circle, color: Colors.blue[700], size: 20),
                 ],
               ],
             ),
@@ -366,25 +341,16 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: Colors.red, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 18,
-        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       ),
-      style: TextStyle(
-        fontSize: 16,
-        color: Colors.grey[800],
-      ),
+      style: TextStyle(fontSize: 16, color: Colors.grey[800]),
       icon: Icon(Icons.arrow_drop_down, color: Colors.blue[700]),
       dropdownColor: Colors.white,
       isExpanded: true,
       items: _cities.map((city) {
         return DropdownMenuItem<String>(
           value: city['id'],
-          child: Text(
-            city['label']!,
-            style: const TextStyle(fontSize: 16),
-          ),
+          child: Text(city['label']!, style: const TextStyle(fontSize: 16)),
         );
       }).toList(),
       onChanged: (value) {
@@ -438,15 +404,9 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: Colors.red, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 18,
-        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       ),
-      style: const TextStyle(
-        fontSize: 18,
-        letterSpacing: 1.5,
-      ),
+      style: const TextStyle(fontSize: 18, letterSpacing: 1.5),
       validator: _validatePhone,
     );
   }
@@ -464,9 +424,7 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
           disabledBackgroundColor: Colors.grey[300],
           elevation: _isLoading ? 0 : 4,
           shadowColor: Colors.amber[700]?.withOpacity(0.5),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
         child: _isLoading
             ? const SizedBox(
@@ -480,17 +438,11 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
             : const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    '🚀',
-                    style: TextStyle(fontSize: 24),
-                  ),
+                  Text('🚀', style: TextStyle(fontSize: 24)),
                   SizedBox(width: 12),
                   Text(
                     'أرسل طلبي للمصانع الآن',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
