@@ -19,9 +19,9 @@ class AIAssistantCard extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                const Color(0xFF6A1B9A).withOpacity(0.85),
-                const Color(0xFF8E24AA).withOpacity(0.85),
-                const Color(0xFFAB47BC).withOpacity(0.85),
+                const Color(0xFF6A1B9A).withValues(alpha: 0.85),
+                const Color(0xFF8E24AA).withValues(alpha: 0.85),
+                const Color(0xFFAB47BC).withValues(alpha: 0.85),
               ],
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
@@ -46,7 +46,7 @@ class AIAssistantCard extends StatelessWidget {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
+                              color: Colors.white.withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: const Text(
@@ -73,7 +73,7 @@ class AIAssistantCard extends StatelessWidget {
                           Text(
                             'اعثر على مطبخك المثالي في أقل من 30 ثانية',
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.9),
+                              color: Colors.white.withValues(alpha: 0.9),
                               fontSize: 12,
                               height: 1.3,
                             ),
@@ -119,7 +119,7 @@ class AIAssistantCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Icon(

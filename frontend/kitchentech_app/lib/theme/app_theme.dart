@@ -17,7 +17,6 @@ class AppTheme {
       primary: primaryBlue,
       secondary: secondaryGold,
       surface: surfaceWhite,
-      background: backgroundLight,
       brightness: Brightness.light,
     ),
     scaffoldBackgroundColor: backgroundLight,
@@ -212,7 +211,7 @@ class AppTheme {
     // Chip theme
     chipTheme: ChipThemeData(
       backgroundColor: surfaceWhite,
-      selectedColor: primaryBlue.withOpacity(0.1),
+      selectedColor: primaryBlue.withValues(alpha: 0.1),
       labelStyle: const TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w500,

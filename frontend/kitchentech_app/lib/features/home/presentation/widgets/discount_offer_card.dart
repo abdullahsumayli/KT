@@ -30,7 +30,7 @@ class DiscountOfferCard extends StatelessWidget {
                 child: Icon(
                   Icons.kitchen,
                   size: 120,
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha: 0.1),
                 ),
               ),
               Padding(
@@ -71,7 +71,7 @@ class DiscountOfferCard extends StatelessWidget {
                     Text(
                       'على جميع المطابخ الجاهزة فقط',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.95),
+                        color: Colors.white.withValues(alpha: 0.95),
                         fontSize: 13,
                       ),
                     ),
@@ -79,7 +79,7 @@ class DiscountOfferCard extends StatelessWidget {
                     Text(
                       'استكشف العروض الآن',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.85),
+                        color: Colors.white.withValues(alpha: 0.85),
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                       ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+export 'kitchen_ad_card.dart';
+
 /// Primary elevated button with full width
 class PrimaryButton extends StatelessWidget {
   final String text;
@@ -239,8 +241,8 @@ class AiRecommendationBox extends StatelessWidget {
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
             colors: [
-              const Color(0xFF2962FF).withOpacity(0.1),
-              const Color(0xFFFFC857).withOpacity(0.1),
+              const Color(0xFF2962FF).withValues(alpha: 0.1),
+              const Color(0xFFFFC857).withValues(alpha: 0.1),
             ],
           ),
           borderRadius: BorderRadius.circular(16),

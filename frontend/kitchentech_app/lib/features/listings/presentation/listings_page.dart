@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../data/listings_api.dart';
 import '../models/kitchen_listing.dart';
@@ -83,10 +84,7 @@ class _ListingsPageState extends State<ListingsPage> {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Navigator.pushNamed(context, '/add-listing').then((_) {
-                // Refresh listings after returning
-                _fetchListings();
-              });
+              context.go('/dashboard/new-ad');
             },
             tooltip: 'أضف مطبخك',
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../shared/widgets/shared_widgets.dart';
 import '../../listings/presentation/widgets/kitchen_card.dart';
@@ -149,7 +150,7 @@ class _AiWizardScreenState extends State<AiWizardScreen> {
                       color: Colors.white,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.7),
                           blurRadius: 10,
                           offset: const Offset(0, -2),
                         ),
@@ -412,7 +413,7 @@ class _AiWizardScreenState extends State<AiWizardScreen> {
         const SizedBox(height: 24),
         PrimaryButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/listings');
+            context.go('/kitchens');
           },
           text: 'عرض جميع النتائج',
           icon: Icons.arrow_back,
@@ -435,7 +436,7 @@ class _AiWizardScreenState extends State<AiWizardScreen> {
               width: 2,
             ),
             borderRadius: BorderRadius.circular(16),
-            color: selected ? const Color(0xFF2962FF).withOpacity(0.1) : null,
+            color: selected ? const Color(0xFF2962FF).withValues(alpha: 0.1) : null,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

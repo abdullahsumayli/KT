@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../../listings/presentation/widgets/kitchen_card.dart';
+import '../../../../shared/widgets/kitchen_ad_card.dart';
+import '../../../shared/data/models/kitchen_ad.dart';
 
 class FeaturedKitchensSection extends StatefulWidget {
-  final List<Map<String, dynamic>> kitchens;
+  final List<KitchenAd> kitchenAds;
   final VoidCallback onViewAll;
 
   const FeaturedKitchensSection({
     super.key,
-    required this.kitchens,
+    required this.kitchenAds,
     required this.onViewAll,
   });
 
@@ -27,13 +28,16 @@ class _FeaturedKitchensSectionState extends State<FeaturedKitchensSection> {
     'خشبي',
   ];
 
-  List<Map<String, dynamic>> get filteredKitchens {
+  List<KitchenAd> get filteredKitchens {
     if (selectedFilter == null) {
-      return widget.kitchens;
+      return widget.kitchenAds;
     }
-    // For now, return all kitchens since we don't have filter metadata
-    // In a real app, you would filter based on kitchen properties
-    return widget.kitchens;
+    // Filter based on kitchenType - match string to enum
+    return widget.kitchenAds.where((ad) {
+      final kitchenTypeLabel = _getKitchenTypeLabel(ad.kitchenType);
+      return kitchenTypeLabel.contains(selectedFilter!) ||
+          ad.kitchenType.name.toLowerCase() == selectedFilter!.toLowerCase();
+    }).toList();
   }
 
   @override
@@ -131,20 +135,41 @@ class _FeaturedKitchensSectionState extends State<FeaturedKitchensSection> {
             ),
             itemCount: filteredKitchens.length,
             itemBuilder: (context, index) {
-              final kitchen = filteredKitchens[index];
-              return KitchenCard(
-                id: kitchen['id'],
-                title: kitchen['title'],
-                city: kitchen['city'],
-                price: kitchen['price'],
-                type: kitchen['type'],
-                aiScore: kitchen['aiScore'],
-                imageUrl: kitchen['imageUrl'],
+              final ad = filteredKitchens[index];
+              return KitchenAdCard(
+                ad: ad,
+                isFavorite: false, // TODO: Implement favorites logic
+                onFavoriteToggle: () {
+                  // TODO: Implement favorites toggle
+                },
               );
             },
           ),
         ),
       ],
     );
+  }
+
+  String _getKitchenTypeLabel(KitchenType type) {
+    switch (type) {
+      case KitchenType.modern:
+        return 'مطبخ حديث';
+      case KitchenType.classic:
+        return 'مطبخ كلاسيكي';
+      case KitchenType.neoClassic:
+        return 'مطبخ نيو كلاسيك';
+      case KitchenType.open:
+        return 'مطبخ مفتوح';
+      case KitchenType.closed:
+        return 'مطبخ مغلق';
+      case KitchenType.economic:
+        return 'مطبخ اقتصادي';
+      case KitchenType.luxury:
+        return 'مطبخ فاخر';
+      case KitchenType.apartment:
+        return 'مطبخ شقة';
+      case KitchenType.villa:
+        return 'مطبخ فيلا';
+    }
   }
 }

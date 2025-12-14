@@ -8,8 +8,49 @@ Platform for renting commercial kitchens.
 KT/
 ├── backend/          # FastAPI backend
 ├── frontend/         # Flutter mobile app
+├── deploy/          # Production deployment assets (Hetzner)
 └── docs/            # Documentation and wireframes
 ```
+
+## 🚀 Production Deployment
+
+**Production Site**: https://souqmatbakh.com  
+**Server**: Hetzner Ubuntu (91.99.106.230)  
+**Stack**: Nginx + Gunicorn + Uvicorn + PostgreSQL + SSL
+
+### Quick Links
+
+- **[Deployment Guide](deploy/README.md)** - Complete deployment documentation
+- **[First-Time Setup](deploy/scripts/first_time_server_setup.md)** - Initial server configuration
+- **[Deploy Script](deploy/scripts/deploy_backend.sh)** - Automated deployment
+
+### Deployment Assets
+
+```
+deploy/
+├── README.md                          # Deployment overview
+├── backend.env.prod.example           # Production environment template
+├── systemd/
+│   └── souqmatbakh-backend.service   # Systemd service
+├── nginx/
+│   └── souqmatbakh.com.conf          # Nginx configuration
+└── scripts/
+    ├── deploy_backend.sh             # Deployment automation
+    └── first_time_server_setup.md    # Setup guide
+```
+
+### Quick Deploy
+
+```bash
+# SSH into server
+ssh root@91.99.106.230
+
+# Deploy updates
+cd /var/www/souqmatbakh/backend
+sudo -u www-data ./deploy/scripts/deploy_backend.sh
+```
+
+---
 
 ## Backend (FastAPI)
 

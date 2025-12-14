@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class KitchenCard extends StatelessWidget {
   final String id;
@@ -28,7 +29,7 @@ class KitchenCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -38,19 +39,7 @@ class KitchenCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            Navigator.pushNamed(
-              context,
-              '/product',
-              arguments: {
-                'id': id,
-                'title': title,
-                'city': city,
-                'price': price,
-                'type': type,
-                'aiScore': aiScore,
-                'imageUrl': imageUrl,
-              },
-            );
+            context.go('/kitchens/$id');
           },
           borderRadius: BorderRadius.circular(20),
           child: Column(
@@ -108,7 +97,7 @@ class KitchenCard extends StatelessWidget {
                               end: Alignment.bottomCenter,
                               colors: [
                                 Colors.transparent,
-                                Colors.black.withOpacity(0.3),
+                                Colors.black.withValues(alpha: 0.3),
                               ],
                             ),
                           ),
@@ -132,7 +121,7 @@ class KitchenCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color(0xFF2962FF).withOpacity(0.4),
+                                color: const Color(0xFF2962FF).withValues(alpha: 0.4),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
@@ -173,7 +162,7 @@ class KitchenCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
+                                color: Colors.black.withValues(alpha: 0.1),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
@@ -199,7 +188,7 @@ class KitchenCard extends StatelessWidget {
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
+                                color: Colors.black.withValues(alpha: 0.1),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
@@ -275,8 +264,8 @@ class KitchenCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              const Color(0xFF2962FF).withOpacity(0.1),
-                              const Color(0xFF1976D2).withOpacity(0.05),
+                              const Color(0xFF2962FF).withValues(alpha: 0.1),
+                              const Color(0xFF1976D2).withValues(alpha: 0.05),
                             ],
                           ),
                           borderRadius: BorderRadius.circular(12),
