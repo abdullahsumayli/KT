@@ -8,6 +8,8 @@ import re
 
 from app.database import get_db
 from app.models import QuoteRequest, KitchenStyle, QuoteRequestStatus
+from app.models.user import User, UserRole
+from app.core.security import get_current_user
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
@@ -16,6 +18,20 @@ router = APIRouter(prefix="/api/v1/quotes", tags=["quotes"])
 
 # Rate limiting
 limiter = Limiter(key_func=get_remote_address)
+
+
+# ============================================================================
+# Admin Verification
+# ============================================================================
+
+async def verify_admin(current_user: User = Depends(get_current_user)):
+    """Verify that the current user is an admin."""
+    if current_user.role != UserRole.ADMIN:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied. Admin privileges required."
+        )
+    return current_user
 
 
 # ============================================================================
@@ -73,6 +89,12 @@ class QuoteRequestStats(BaseModel):
     by_style: dict
     by_city: dict
     by_status: dict
+
+
+class QuoteStatusUpdate(BaseModel):
+    """Schema for updating quote status."""
+    status: QuoteRequestStatus = Field(..., description="New status")
+    admin_notes: Optional[str] = Field(None, description="Admin notes")
 
 
 # ============================================================================
@@ -138,7 +160,9 @@ async def get_quote_requests(
     limit: int = 100,
     status_filter: Optional[QuoteRequestStatus] = None,
     city_filter: Optional[str] = None,
-    db: Session = Depends(get_db)
+    style_filter: Optional[KitchenStyle] = None,
+    db: Session = Depends(get_db),
+    admin: User = Depends(verify_admin)
 ):
     """
     Get all quote requests with optional filters.
@@ -148,8 +172,9 @@ async def get_quote_requests(
     - limit: Maximum number of records to return (default: 100)
     - status_filter: Filter by status (new, contacted, quoted, converted, lost)
     - city_filter: Filter by city name
+    - style_filter: Filter by kitchen style
     
-    **Note**: This endpoint should be protected with admin authentication in production
+    **Authentication**: Requires admin token
     """
     
     query = db.query(QuoteRequest)
@@ -161,6 +186,9 @@ async def get_quote_requests(
     if city_filter:
         query = query.filter(QuoteRequest.city == city_filter.lower())
     
+    if style_filter:
+        query = query.filter(QuoteRequest.style == style_filter)
+    
     # Order by most recent first
     quotes = query.order_by(
         QuoteRequest.created_at.desc()
@@ -170,7 +198,10 @@ async def get_quote_requests(
 
 
 @router.get("/stats", response_model=QuoteRequestStats)
-async def get_quote_stats(db: Session = Depends(get_db)):
+async def get_quote_stats(
+    db: Session = Depends(get_db),
+    admin: User = Depends(verify_admin)
+):
     """
     Get statistics about quote requests.
     
@@ -180,7 +211,7 @@ async def get_quote_stats(db: Session = Depends(get_db)):
     - by_city: Count grouped by city
     - by_status: Count grouped by status
     
-    **Note**: This endpoint should be protected with admin authentication in production
+    **Authentication**: Requires admin token
     """
     
     # Total count
@@ -221,7 +252,8 @@ async def get_quote_stats(db: Session = Depends(get_db)):
 @router.get("/{quote_id}", response_model=QuoteRequestResponse)
 async def get_quote_request(
     quote_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    admin: User = Depends(verify_admin)
 ):
     """
     Get a specific quote request by ID.
@@ -229,7 +261,7 @@ async def get_quote_request(
     **Path Parameters**:
     - quote_id: The ID of the quote request
     
-    **Note**: This endpoint should be protected with admin authentication in production
+    **Authentication**: Requires admin token
     """
     
     quote = db.query(QuoteRequest).filter(QuoteRequest.id == quote_id).first()
@@ -243,12 +275,12 @@ async def get_quote_request(
     return quote
 
 
-@router.patch("/{quote_id}/status")
+@router.patch("/{quote_id}/status", response_model=QuoteRequestResponse)
 async def update_quote_status(
     quote_id: int,
-    new_status: QuoteRequestStatus,
-    admin_notes: Optional[str] = None,
-    db: Session = Depends(get_db)
+    update_data: QuoteStatusUpdate,
+    db: Session = Depends(get_db),
+    admin: User = Depends(verify_admin)
 ):
     """
     Update the status of a quote request.
@@ -257,10 +289,10 @@ async def update_quote_status(
     - quote_id: The ID of the quote request
     
     **Request Body**:
-    - new_status: New status (new, contacted, quoted, converted, lost)
+    - status: New status (new, contacted, quoted, converted, lost)
     - admin_notes: Optional notes from admin
     
-    **Note**: This endpoint should be protected with admin authentication in production
+    **Authentication**: Requires admin token
     """
     
     quote = db.query(QuoteRequest).filter(QuoteRequest.id == quote_id).first()
@@ -272,24 +304,25 @@ async def update_quote_status(
         )
     
     # Update status
-    quote.status = new_status
+    quote.status = update_data.status
     
     # Update admin notes if provided
-    if admin_notes:
-        quote.admin_notes = admin_notes
+    if update_data.admin_notes is not None:
+        quote.admin_notes = update_data.admin_notes
     
     quote.updated_at = datetime.utcnow()
     
     db.commit()
     db.refresh(quote)
     
-    return {"message": "Quote request status updated successfully", "quote": quote}
+    return quote
 
 
 @router.delete("/{quote_id}")
 async def delete_quote_request(
     quote_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    admin: User = Depends(verify_admin)
 ):
     """
     Delete a quote request.
@@ -297,7 +330,7 @@ async def delete_quote_request(
     **Path Parameters**:
     - quote_id: The ID of the quote request to delete
     
-    **Note**: This endpoint should be protected with admin authentication in production
+    **Authentication**: Requires admin token
     """
     
     quote = db.query(QuoteRequest).filter(QuoteRequest.id == quote_id).first()
