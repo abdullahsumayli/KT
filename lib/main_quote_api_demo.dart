@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'widgets/quote_request_form.dart';
 
 void main() {
@@ -13,11 +14,7 @@ class QuoteApiDemoApp extends StatelessWidget {
     return MaterialApp(
       title: 'Quote API Demo - Production',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-        useMaterial3: true,
-        fontFamily: 'Arial',
-      ),
+      theme: ThemeData(primarySwatch: Colors.teal, useMaterial3: true, fontFamily: 'Arial'),
       home: const QuoteApiDemoPage(),
     );
   }
@@ -32,10 +29,7 @@ class QuoteApiDemoPage extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            '🚀 اختبار API الإنتاج',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+          title: const Text('🚀 اختبار API الإنتاج', style: TextStyle(fontWeight: FontWeight.bold)),
           centerTitle: true,
           backgroundColor: Colors.teal,
           foregroundColor: Colors.white,
@@ -45,10 +39,7 @@ class QuoteApiDemoPage extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                Colors.teal.shade50,
-                Colors.white,
-              ],
+              colors: [Colors.teal.shade50, Colors.white],
             ),
           ),
           child: SingleChildScrollView(
@@ -99,23 +90,18 @@ class QuoteApiDemoPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // النموذج الحقيقي
                 Card(
                   elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: QuoteRequestForm(),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  child: const Padding(padding: EdgeInsets.all(16), child: QuoteRequestForm()),
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // معلومات تقنية
                 Container(
                   padding: const EdgeInsets.all(16),
@@ -167,11 +153,7 @@ class QuoteApiDemoPage extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          color: color.shade900,
-        ),
+        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: color.shade900),
       ),
     );
   }
@@ -182,10 +164,7 @@ class QuoteApiDemoPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
-          ),
+          Text(label, style: TextStyle(fontSize: 14, color: Colors.grey.shade700)),
           Text(
             value,
             style: TextStyle(

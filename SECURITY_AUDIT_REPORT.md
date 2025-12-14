@@ -258,6 +258,7 @@ client_max_body_size 10M;
 **Status**: **READY FOR DEPLOYMENT** (Configuration documented)
 
 **Recommended Configuration**:
+
 - **Bot Fight Mode**: Block automated bot traffic
 - **OWASP Managed Rules**: Protect against SQLi, XSS, RCE (Sensitivity: Medium)
 - **Rate Limiting**: 10 req/min (auth), 300 req/min (general)
@@ -265,11 +266,13 @@ client_max_body_size 10M;
 - **DDoS Protection**: Automatic L3/L4/L7 mitigation
 
 **Security Architecture**:
+
 ```
 Internet → Cloudflare Edge (WAF/Bot Protection) → Nginx → FastAPI
 ```
 
 **Benefits**:
+
 - ✅ Edge-level DDoS mitigation
 - ✅ OWASP Top 10 protection (SQLi, XSS, RCE)
 - ✅ Bot detection and blocking
@@ -278,6 +281,7 @@ Internet → Cloudflare Edge (WAF/Bot Protection) → Nginx → FastAPI
 - ✅ Real-time threat analytics
 
 **Implementation Status**:
+
 - Configuration guide: [CLOUDFLARE_WAF_SETUP.md](CLOUDFLARE_WAF_SETUP.md)
 - Deployment guide: [deploy/README.md](deploy/README.md#cloudflare-waf--edge-security)
 - Testing procedures: Documented in WAF setup guide
@@ -345,18 +349,20 @@ for i in {1..15}; do curl -s -o /dev/null -w '%{http_code}\n' https://souqmatbak
 
 **Rate Limiting Layers**:
 
-| Layer | Auth Limit | API Limit | Action | Status |
-|-------|------------|-----------|--------|--------|
-| **Nginx** | 5 req/min | 20 req/sec | HTTP 429 | ✅ Active |
-| **FastAPI** | 3-5 req/min | - | HTTP 429 | ✅ Active |
-| **Cloudflare** | 10 req/min | 300 req/min | Block/Challenge | 📋 Ready |
+| Layer          | Auth Limit  | API Limit   | Action          | Status    |
+| -------------- | ----------- | ----------- | --------------- | --------- |
+| **Nginx**      | 5 req/min   | 20 req/sec  | HTTP 429        | ✅ Active |
+| **FastAPI**    | 3-5 req/min | -           | HTTP 429        | ✅ Active |
+| **Cloudflare** | 10 req/min  | 300 req/min | Block/Challenge | 📋 Ready  |
 
 **Configuration Files**:
+
 - Nginx: `/etc/nginx/nginx.conf` + `/etc/nginx/sites-available/souqmatbakh.com.conf`
 - FastAPI: `app/main.py` + `app/routes/auth.py` (slowapi decorators)
 - Cloudflare: [CLOUDFLARE_WAF_SETUP.md](CLOUDFLARE_WAF_SETUP.md)
 
 **Test Results**:
+
 - ✅ Auth endpoints: 429 after 3-5 requests (tested 2025-12-14)
 - ✅ Rate limit header present: `x-ratelimit-policy: api=20r/s, auth=5r/m`
 - ✅ Frontend browsing unaffected (tested 40 requests = 100% success)

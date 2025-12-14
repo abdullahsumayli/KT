@@ -5,6 +5,7 @@
 تم بنجاح تطوير ونشر نظام كامل لطلبات عروض الأسعار للمطابخ يتضمن:
 
 ### 1. **Backend API** (FastAPI + PostgreSQL)
+
 - ✅ 6 endpoints لإدارة الطلبات
 - ✅ Database migration مع PostgreSQL
 - ✅ Rate limiting (10 req/min)
@@ -12,6 +13,7 @@
 - ✅ منشور على Production: `https://souqmatbakh.com/api/v1/quotes/`
 
 ### 2. **Flutter Widget** (مكون واجهة المستخدم)
+
 - ✅ دعم كامل للغة العربية وRTL
 - ✅ 4 أنواع مطابخ (Modern, Classic, Wood, Aluminum)
 - ✅ Validation للهاتف السعودي (05xxxxxxxx)
@@ -19,6 +21,7 @@
 - ✅ متصل بـ API الإنتاج
 
 ### 3. **API Service Layer** (طبقة الاتصال)
+
 - ✅ معالجة شاملة للأخطاء
 - ✅ Timeout تلقائي (10 ثواني)
 - ✅ رسائل خطأ واضحة بالعربية
@@ -26,6 +29,7 @@
 - ✅ Exception handling متقدم
 
 ### 4. **Security** (الأمان)
+
 - ✅ HTTPS/TLS encryption
 - ✅ Rate limiting على مستويين (Nginx + FastAPI)
 - ✅ Input validation
@@ -104,6 +108,7 @@ curl https://souqmatbakh.com/api/health
 ## 📡 API Endpoints (Production)
 
 ### إنشاء طلب عرض سعر
+
 ```bash
 POST https://souqmatbakh.com/api/v1/quotes/
 Content-Type: application/json
@@ -126,6 +131,7 @@ Response (201):
 ```
 
 ### عرض جميع الطلبات (Admin Only)
+
 ```bash
 GET https://souqmatbakh.com/api/v1/quotes/
 Authorization: Bearer <admin_token>
@@ -138,6 +144,7 @@ Response (200):
 ```
 
 ### الإحصائيات (Admin Only)
+
 ```bash
 GET https://souqmatbakh.com/api/v1/quotes/stats
 Authorization: Bearer <admin_token>
@@ -194,15 +201,15 @@ flutter test test/integration/quote_api_integration_test.dart
 
 ## 📊 Production Status
 
-| Component | Status | Details |
-|-----------|--------|---------|
-| Backend API | ✅ Running | Gunicorn + Uvicorn (2 workers) |
-| Database | ✅ Active | PostgreSQL 13+ |
-| Migrations | ✅ Applied | quote_requests table created |
-| SSL/TLS | ✅ Active | Cloudflare + Let's Encrypt |
-| Rate Limiting | ✅ Active | Nginx (20/s) + FastAPI (10/min) |
-| Flutter Widget | ✅ Ready | Integrated with production API |
-| Documentation | ✅ Complete | 5 documentation files |
+| Component      | Status      | Details                         |
+| -------------- | ----------- | ------------------------------- |
+| Backend API    | ✅ Running  | Gunicorn + Uvicorn (2 workers)  |
+| Database       | ✅ Active   | PostgreSQL 13+                  |
+| Migrations     | ✅ Applied  | quote_requests table created    |
+| SSL/TLS        | ✅ Active   | Cloudflare + Let's Encrypt      |
+| Rate Limiting  | ✅ Active   | Nginx (20/s) + FastAPI (10/min) |
+| Flutter Widget | ✅ Ready    | Integrated with production API  |
+| Documentation  | ✅ Complete | 5 documentation files           |
 
 ---
 
@@ -235,6 +242,7 @@ flutter test test/integration/quote_api_integration_test.dart
 ## 🎯 الخطوات التالية (اختياري)
 
 ### Phase 1: Admin Dashboard (مقترح)
+
 - [ ] صفحة عرض جميع الطلبات
 - [ ] فلترة حسب الحالة/المدينة/النوع
 - [ ] تحديث حالة الطلب
@@ -242,12 +250,14 @@ flutter test test/integration/quote_api_integration_test.dart
 - [ ] تصدير إلى Excel/CSV
 
 ### Phase 2: Notifications (مقترح)
+
 - [ ] إشعارات SMS للعملاء
 - [ ] Email notifications للإدارة
 - [ ] WhatsApp integration
 - [ ] Push notifications في التطبيق
 
 ### Phase 3: Analytics (مقترح)
+
 - [ ] لوحة تحكم إحصائيات
 - [ ] رسوم بيانية للطلبات
 - [ ] تحليل conversion rate
@@ -258,18 +268,24 @@ flutter test test/integration/quote_api_integration_test.dart
 ## 🐛 استكشاف الأخطاء
 
 ### مشكلة: "فشل الاتصال بالسيرفر"
+
 **الحل:**
+
 1. تحقق من اتصال الإنترنت
 2. تأكد من أن API يعمل: `curl https://souqmatbakh.com/api/health`
 3. تحقق من جدار الحماية/VPN
 
 ### مشكلة: "تم تجاوز الحد المسموح"
+
 **الحل:**
+
 - انتظر دقيقة واحدة ثم حاول مرة أخرى
 - Rate limit: 10 requests/minute
 
 ### مشكلة: "رقم الجوال غير صحيح"
+
 **الحل:**
+
 - يجب أن يبدأ بـ 05
 - يجب أن يتكون من 10 أرقام فقط
 - مثال صحيح: `0512345678`
@@ -279,6 +295,7 @@ flutter test test/integration/quote_api_integration_test.dart
 ## 📞 الدعم
 
 للمساعدة أو الاستفسارات:
+
 - **Backend Issues**: تحقق من [backend/QUOTE_REQUESTS_API.md](backend/QUOTE_REQUESTS_API.md)
 - **Flutter Issues**: راجع [FLUTTER_API_INTEGRATION.md](FLUTTER_API_INTEGRATION.md)
 - **Security**: اطلع على [SECURITY_AUDIT_REPORT.md](SECURITY_AUDIT_REPORT.md)
@@ -305,6 +322,7 @@ git log --oneline --all --graph -10
 ```
 
 Recent commits:
+
 - `b1351a7` feat: integrate QuoteRequestForm with production API
 - `0bb0ab4` fix: use lowercase values for ENUMs in database
 - `1809622` fix: add Request parameter for slowapi

@@ -575,6 +575,7 @@ map $limit $limit_key {
 - **Reversible**: Can be adjusted or removed without code changes
 
 ---
+
 ## 🛡️ Cloudflare WAF & Edge Security
 
 ### Overview
@@ -582,6 +583,7 @@ map $limit $limit_key {
 Cloudflare provides an additional **edge protection layer** before traffic reaches your server, offering DDoS mitigation, WAF rules, and bot protection.
 
 **Security Architecture:**
+
 ```
 Internet → Cloudflare Edge (WAF, Bot Protection) → Nginx → FastAPI
 ```
@@ -600,11 +602,13 @@ Internet → Cloudflare Edge (WAF, Bot Protection) → Nginx → FastAPI
 ### Quick Setup
 
 **Prerequisites:**
+
 - Cloudflare account with souqmatbakh.com added
 - DNS nameservers pointed to Cloudflare
 - Cloudflare proxy enabled (orange cloud ☁️)
 
 **Configuration Steps:**
+
 1. Navigate: Dashboard → souqmatbakh.com
 2. Enable features:
    - Security → Bots → Bot Fight Mode: **ON**
@@ -613,6 +617,7 @@ Internet → Cloudflare Edge (WAF, Bot Protection) → Nginx → FastAPI
    - Security → Settings → Security Level: **Medium**
 
 **Verification:**
+
 ```bash
 # Test WAF protection
 curl "https://souqmatbakh.com/api/v1/products?id=1' OR '1'='1"
@@ -631,6 +636,7 @@ For detailed step-by-step instructions, UI navigation, testing procedures, and t
 **→ See: [CLOUDFLARE_WAF_SETUP.md](../CLOUDFLARE_WAF_SETUP.md)**
 
 This comprehensive guide includes:
+
 - Exact Cloudflare UI navigation paths
 - Configuration screenshots and values
 - Testing commands and expected results
@@ -658,6 +664,7 @@ This comprehensive guide includes:
 **Recommendation**: Start with Free plan, upgrade to Pro when traffic > 10k visitors/day
 
 ---
+
 ## �📞 Troubleshooting
 
 ### Backend won't start
