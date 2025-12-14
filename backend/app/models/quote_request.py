@@ -27,10 +27,18 @@ class QuoteRequest(Base):
     __tablename__ = "quote_requests"
     
     id = Column(Integer, primary_key=True, index=True)
-    style = Column(SQLEnum(KitchenStyle), nullable=False, index=True)
+    style = Column(
+        SQLEnum(KitchenStyle, values_callable=lambda x: [e.value for e in x]),
+        nullable=False,
+        index=True
+    )
     city = Column(String(100), nullable=False, index=True)
     phone = Column(String(20), nullable=False, index=True)
-    status = Column(SQLEnum(QuoteRequestStatus), default=QuoteRequestStatus.NEW, nullable=False)
+    status = Column(
+        SQLEnum(QuoteRequestStatus, values_callable=lambda x: [e.value for e in x]),
+        default=QuoteRequestStatus.NEW,
+        nullable=False
+    )
     admin_notes = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
