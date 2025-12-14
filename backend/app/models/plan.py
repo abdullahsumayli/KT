@@ -20,7 +20,7 @@ class Plan(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)  # البرونزية، الفضية، الذهبية
     name_en = Column(String, nullable=False)  # Bronze, Silver, Gold
-    type = Column(SQLEnum(PlanType), nullable=False)
+    type = Column(SQLEnum(PlanType, values_callable=lambda x: [e.value for e in x]), nullable=False)
     price = Column(Float, nullable=False)  # Price in SAR
     duration_days = Column(Integer, default=30)  # Plan duration in days
     max_ads = Column(Integer, nullable=True)  # Null = unlimited

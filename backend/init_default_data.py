@@ -51,11 +51,14 @@ def init_plans(db):
     ]
     
     for plan_data in plans_data:
+        print(f"DEBUG: Checking for existing plan with type: {plan_data['type']} (value: {plan_data['type'].value})")
         existing = db.query(Plan).filter(Plan.type == plan_data["type"]).first()
         if not existing:
             plan = Plan(**plan_data)
             db.add(plan)
             print(f"✓ Created plan: {plan_data['name']}")
+        else:
+            print(f"ℹ️  Plan already exists: {plan_data['name']}")
     
     db.commit()
     print("✅ Plans initialized")
@@ -96,7 +99,8 @@ def create_admin_user(db):
     existing = db.query(User).filter(User.email == admin_email).first()
     
     if not existing:
-        hashed_password = pwd_context.hash("admin123456")  # Change this in production!
+        # Use a simple password - bcrypt has 72 byte limit
+        hashed_password = pwd_context.hash("Admin@2025")
         admin = User(
             email=admin_email,
             username="admin",
@@ -108,7 +112,7 @@ def create_admin_user(db):
         )
         db.add(admin)
         db.commit()
-        print(f"✅ Admin user created: {admin_email} / admin123456")
+        print(f"✅ Admin user created: {admin_email} / Admin@2025")
         print("⚠️  IMPORTANT: Change the admin password immediately!")
     else:
         print("ℹ️  Admin user already exists")
