@@ -17,15 +17,28 @@ depends_on = None
 
 
 def upgrade():
-    # Create kitchen_style enum
-    kitchen_style_enum = sa.Enum('modern', 'classic', 'wood', 'aluminum', name='kitchenstyle')
-    kitchen_style_enum.create(op.get_bind(), checkfirst=True)
+    # Create kitchen_style enum using raw SQL to handle checkfirst properly
+    op.execute("""
+        DO $$ BEGIN
+            CREATE TYPE kitchenstyle AS ENUM ('modern', 'classic', 'wood', 'aluminum');
+        EXCEPTION
+            WHEN duplicate_object THEN null;
+        END $$;
+    """)
     
-    # Create quote_request_status enum
-    quote_status_enum = sa.Enum('new', 'contacted', 'quoted', 'converted', 'lost', name='quoterequeststatus')
-    quote_status_enum.create(op.get_bind(), checkfirst=True)
+    # Create quote_request_status enum using raw SQL
+    op.execute("""
+        DO $$ BEGIN
+            CREATE TYPE quoterequeststatus AS ENUM ('new', 'contacted', 'quoted', 'converted', 'lost');
+        EXCEPTION
+            WHEN duplicate_object THEN null;
+        END $$;
+    """)
     
-    # Create quote_requests table
+    # Create quote_requests table (ENUMs will be referenced by name)
+    kitchen_style_enum = sa.Enum('modern', 'classic', 'wood', 'aluminum', name='kitchenstyle', create_type=False)
+    quote_status_enum = sa.Enum('new', 'contacted', 'quoted', 'converted', 'lost', name='quoterequeststatus', create_type=False)
+    
     op.create_table(
         'quote_requests',
         sa.Column('id', sa.Integer(), nullable=False),
