@@ -1,7 +1,16 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, Text, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, Text, ForeignKey, Enum as SQLEnum
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database import Base
+import enum
+
+
+class ListingStatus(str, enum.Enum):
+    """Listing status enumeration."""
+    PENDING = "pending"  # بانتظار المراجعة
+    APPROVED = "approved"  # معتمدة
+    REJECTED = "rejected"  # مرفوضة
+    INACTIVE = "inactive"  # غير نشطة
 
 
 class Listing(Base):
@@ -20,9 +29,13 @@ class Listing(Base):
     city = Column(String, nullable=False, index=True)
     
     # Status and Type
-    status = Column(String, default="active", index=True)  # active, inactive, pending
+    status = Column(SQLEnum(ListingStatus), default=ListingStatus.PENDING, index=True, nullable=False)
     type = Column(String, index=True)  # Commercial, Home, Shared, Industrial, etc.
     material = Column(String)  # Stainless steel, Wood, Composite, etc.
+    
+    # Review info (for admin)
+    rejection_reason = Column(Text, nullable=True)
+    reviewed_at = Column(DateTime, nullable=True)
     
     # Dimensions
     length_m = Column(Float)
@@ -41,6 +54,7 @@ class Listing(Base):
     # Relationships
     owner = relationship("User", back_populates="listings")
     images = relationship("ListingImage", back_populates="listing", cascade="all, delete-orphan")
+    favorited_by = relationship("Favorite", back_populates="listing", cascade="all, delete-orphan")
     
     def __repr__(self):
-        return f"<Listing(id={self.id}, title={self.title}, price=${self.price})>"
+        return f"<Listing(id={self.id}, title={self.title}, status={self.status})>"

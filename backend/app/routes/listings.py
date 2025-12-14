@@ -3,12 +3,14 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
+import logging
 from app.database import get_db
 from app.models.user import User
 from app.models.listing import Listing
 from app.core.security import get_current_user, get_current_user_optional
 
 router = APIRouter(prefix="/api/v1/listings", tags=["listings"])
+logger = logging.getLogger("kitchentech")
 
 
 # Pydantic schemas
@@ -149,6 +151,8 @@ async def create_listing(
     db.commit()
     db.refresh(new_listing)
     
+    logger.info(f"✅ New listing created: ID {new_listing.id} - '{new_listing.title}' by user {current_user.id}")
+    
     return new_listing
 
 
@@ -170,6 +174,7 @@ async def update_listing(
         )
     
     if listing.owner_id != current_user.id:
+        logger.warning(f"❌ Unauthorized listing update attempt by user {current_user.id} for listing {listing_id}")
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to update this listing"
@@ -184,6 +189,8 @@ async def update_listing(
     
     db.commit()
     db.refresh(listing)
+    
+    logger.info(f"✅ Listing updated: ID {listing_id} by user {current_user.id}")
     
     return listing
 
@@ -205,6 +212,7 @@ async def delete_listing(
         )
     
     if listing.owner_id != current_user.id:
+        logger.warning(f"❌ Unauthorized listing deletion attempt by user {current_user.id} for listing {listing_id}")
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to delete this listing"
@@ -215,5 +223,7 @@ async def delete_listing(
     listing.updated_at = datetime.utcnow()
     
     db.commit()
+    
+    logger.info(f"🗑️ Listing soft-deleted: ID {listing_id} by user {current_user.id}")
     
     return {"message": "Listing marked as inactive", "listing_id": listing_id}

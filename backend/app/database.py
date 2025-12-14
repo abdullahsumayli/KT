@@ -27,7 +27,22 @@ def get_db() -> Session:
 
 
 def init_db():
-    """Initialize database tables."""
+    """Initialize database - imports all models to register them with Base.
+    
+    Note: Table creation is now handled by Alembic migrations.
+    To create tables, run: alembic upgrade head
+    """
     # Import all models to ensure they're registered with Base
-    from app.models import user, listing, listing_image  # noqa
-    Base.metadata.create_all(bind=engine)
+    from app.models import (
+        user, 
+        listing, 
+        listing_image,
+        favorite,
+        plan,
+        subscription,
+        contact_message,
+        site_setting
+    )  # noqa
+    # Note: Base.metadata.create_all() is commented out
+    # Use Alembic migrations instead: alembic upgrade head
+    # Base.metadata.create_all(bind=engine)

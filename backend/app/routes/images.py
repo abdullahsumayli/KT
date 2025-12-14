@@ -4,6 +4,7 @@ from typing import List
 from pydantic import BaseModel
 import os
 import uuid
+import logging
 from pathlib import Path
 from app.database import get_db
 from app.models.listing import Listing
@@ -12,6 +13,12 @@ from app.models.user import User
 from app.core.security import get_current_user
 
 router = APIRouter(prefix="/api/v1", tags=["images"])
+logger = logging.getLogger("kitchentech")
+
+# File upload security settings
+MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB in bytes
+ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp'}
+ALLOWED_CONTENT_TYPES = {'image/jpeg', 'image/png', 'image/webp'}
 
 # Create media directory if it doesn't exist
 MEDIA_DIR = Path("media/listings")
@@ -39,6 +46,7 @@ async def upload_listing_images(
     """
     Upload one or more images for a listing.
     Only the listing owner can upload images.
+    Security: Max 5MB per file, only jpg/jpeg/png/webp allowed.
     """
     
     # Check if listing exists
@@ -51,6 +59,7 @@ async def upload_listing_images(
     
     # Check if current user owns the listing
     if listing.owner_id != current_user.id:
+        logger.warning(f"❌ Unauthorized image upload attempt by user {current_user.id} for listing {listing_id}")
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You don't have permission to upload images for this listing"
@@ -63,21 +72,38 @@ async def upload_listing_images(
     uploaded_images = []
     
     for file in files:
-        # Validate file type
-        if not file.content_type.startswith('image/'):
+        # Security Check 1: Validate content type
+        if file.content_type not in ALLOWED_CONTENT_TYPES:
+            logger.warning(f"❌ Invalid content type: {file.content_type} for file {file.filename}")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"File {file.filename} is not an image"
+                detail=f"Invalid file type: {file.content_type}. Only JPEG, PNG, and WebP images are allowed."
             )
         
-        # Generate unique filename
-        file_extension = Path(file.filename).suffix
+        # Security Check 2: Validate file extension
+        file_extension = Path(file.filename).suffix.lower()
+        if file_extension not in ALLOWED_EXTENSIONS:
+            logger.warning(f"❌ Invalid file extension: {file_extension} for file {file.filename}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid file extension: {file_extension}. Only .jpg, .jpeg, .png, and .webp are allowed."
+            )
+        
+        # Security Check 3: Read file content and validate size
+        content = await file.read()
+        if len(content) > MAX_FILE_SIZE:
+            logger.warning(f"❌ File too large: {len(content)} bytes for file {file.filename}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"File size exceeds maximum allowed size of 5 MB. Your file is {len(content) / (1024*1024):.2f} MB."
+            )
+        
+        # Generate unique filename with validated extension
         unique_filename = f"{uuid.uuid4()}{file_extension}"
         file_path = listing_dir / unique_filename
         
         # Save file
         with open(file_path, "wb") as buffer:
-            content = await file.read()
             buffer.write(content)
         
         # Create database record
@@ -90,12 +116,16 @@ async def upload_listing_images(
         
         db.add(listing_image)
         uploaded_images.append(listing_image)
+        
+        logger.info(f"✅ Image uploaded: {unique_filename} for listing {listing_id} by user {current_user.id}")
     
     db.commit()
     
     # Refresh all images to get their IDs
     for image in uploaded_images:
         db.refresh(image)
+    
+    logger.info(f"✅ Total {len(uploaded_images)} images uploaded for listing {listing_id}")
     
     return uploaded_images
 
@@ -141,6 +171,7 @@ async def delete_listing_image(
     
     # Check if current user owns the listing
     if listing.owner_id != current_user.id:
+        logger.warning(f"❌ Unauthorized image deletion attempt by user {current_user.id} for listing {listing_id}")
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You don't have permission to delete images for this listing"
@@ -162,9 +193,12 @@ async def delete_listing_image(
     file_path = Path("media") / "listings" / str(listing_id) / image.filename
     if file_path.exists():
         file_path.unlink()
+        logger.info(f"🗑️ Image file deleted: {file_path}")
     
     # Delete from database
     db.delete(image)
     db.commit()
+    
+    logger.info(f"✅ Image deleted: {image.filename} (ID: {image_id}) from listing {listing_id} by user {current_user.id}")
     
     return None
