@@ -11,7 +11,7 @@ BACKUP_BASE_DIR="/var/backups/souqmatbakh"
 DB_BACKUP_DIR="${BACKUP_BASE_DIR}/db"
 UPLOADS_BACKUP_DIR="${BACKUP_BASE_DIR}/uploads"
 LOG_FILE="/var/log/souqmatbakh/backup.log"
-ENV_FILE="/var/www/souqmatbakh/backend/.env"
+ENV_FILE="/etc/souqmatbakh/backend.env"
 UPLOADS_DIR="/var/www/souqmatbakh/backend/uploads"
 RETENTION_DAYS=7
 
@@ -40,7 +40,8 @@ if [[ -z "${DB_URL}" ]]; then
     exit 1
 fi
 
-# Parse connection details (support postgresql:// or postgres://)
+# Parse connection details (support postgresql:// or postgres:// or postgresql+psycopg2://)
+DB_URL="${DB_URL#postgresql+psycopg2://}"
 DB_URL="${DB_URL#postgresql://}"
 DB_URL="${DB_URL#postgres://}"
 
