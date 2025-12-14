@@ -575,7 +575,89 @@ map $limit $limit_key {
 - **Reversible**: Can be adjusted or removed without code changes
 
 ---
+## 🛡️ Cloudflare WAF & Edge Security
 
+### Overview
+
+Cloudflare provides an additional **edge protection layer** before traffic reaches your server, offering DDoS mitigation, WAF rules, and bot protection.
+
+**Security Architecture:**
+```
+Internet → Cloudflare Edge (WAF, Bot Protection) → Nginx → FastAPI
+```
+
+### Recommended Configuration
+
+**For production deployment, enable:**
+
+1. **Bot Fight Mode**: Block automated bot traffic
+2. **OWASP Managed Rules**: Protect against SQLi, XSS, RCE (Sensitivity: Medium)
+3. **Rate Limiting Rules**:
+   - Auth endpoints (`/api/auth/*`): 10 req/min per IP → Block
+   - General traffic (`/*`): 300 req/min per IP → Managed Challenge
+4. **Security Level**: Medium
+
+### Quick Setup
+
+**Prerequisites:**
+- Cloudflare account with souqmatbakh.com added
+- DNS nameservers pointed to Cloudflare
+- Cloudflare proxy enabled (orange cloud ☁️)
+
+**Configuration Steps:**
+1. Navigate: Dashboard → souqmatbakh.com
+2. Enable features:
+   - Security → Bots → Bot Fight Mode: **ON**
+   - Security → WAF → Managed rules: **Enable OWASP** (Sensitivity: Medium)
+   - Security → WAF → Rate limiting rules: **Add 2 rules** (auth + general)
+   - Security → Settings → Security Level: **Medium**
+
+**Verification:**
+```bash
+# Test WAF protection
+curl "https://souqmatbakh.com/api/v1/products?id=1' OR '1'='1"
+# Expected: 403 Forbidden (blocked by OWASP rules)
+
+# Test rate limiting
+for i in {1..15}; do curl -s -o /dev/null -w "%{http_code}\n" \
+  -X POST https://souqmatbakh.com/api/v1/auth/login; done
+# Expected: 429 after 10 requests
+```
+
+### Complete Setup Guide
+
+For detailed step-by-step instructions, UI navigation, testing procedures, and troubleshooting:
+
+**→ See: [CLOUDFLARE_WAF_SETUP.md](../CLOUDFLARE_WAF_SETUP.md)**
+
+This comprehensive guide includes:
+- Exact Cloudflare UI navigation paths
+- Configuration screenshots and values
+- Testing commands and expected results
+- Multi-layer rate limiting strategy
+- IP whitelisting procedures
+- Monitoring and maintenance schedules
+- Troubleshooting common issues
+- Monthly security audit checklist
+
+### Benefits
+
+✅ **DDoS Protection**: Automatic L3/L4/L7 attack mitigation  
+✅ **WAF**: OWASP Top 10 protection (SQLi, XSS, RCE)  
+✅ **Bot Mitigation**: Block automated scrapers and bots  
+✅ **Rate Limiting**: Edge-level request throttling  
+✅ **Performance**: CDN caching reduces server load  
+✅ **Analytics**: Real-time threat monitoring dashboard
+
+### Cost
+
+- **Free Plan**: Sufficient for launch (Bot Fight Mode, basic WAF, 1 rate limit rule)
+- **Pro Plan** ($20/month): More rate limiting rules, advanced bot detection
+- **Business Plan** ($200/month): Unlimited rules, Super Bot Fight Mode, SLA
+
+**Recommendation**: Start with Free plan, upgrade to Pro when traffic > 10k visitors/day
+
+---
 ## �📞 Troubleshooting
 
 ### Backend won't start
