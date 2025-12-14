@@ -1,0 +1,41 @@
+[Unit]
+Description=KitchenTech Backend API (souqmatbakh.com)
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=notify
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/souqmatbakh/backend
+EnvironmentFile=/var/www/souqmatbakh/backend/.env
+
+# Gunicorn with Uvicorn workers
+ExecStart=/var/www/souqmatbakh/backend/.venv/bin/gunicorn \
+    app.main:app \
+    --bind 127.0.0.1:8000 \
+    --workers 2 \
+    --worker-class uvicorn.workers.UvicornWorker \
+    --access-logfile /var/log/souqmatbakh/backend-access.log \
+    --error-logfile /var/log/souqmatbakh/backend-error.log \
+    --log-level info \
+    --timeout 120 \
+    --graceful-timeout 30
+
+# Process management
+Restart=always
+RestartSec=5
+StartLimitInterval=0
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/souqmatbakh/backend/media /var/log/souqmatbakh
+
+# Resource limits
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
