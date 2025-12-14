@@ -18,11 +18,11 @@
   postgresql+psycopg2://ktuser:KT_Secure_DB_v2_2025_Qx9pLm8Rw3@127.0.0.1:5432/kitchentech_db
   ```
 
-### 2️⃣ تدوير كلمة مرور الأدمن ✅
+### 2️⃣ كلمة مرور الأدمن الحالية ✅
 
 - **Email**: admin@kitchentech.sa
-- **كلمة المرور الجديدة**: `KTAdmin@2025#Secure`
-- **⚠️ ملاحظة**: غيّر كلمة المرور من لوحة التحكم فوراً!
+- **كلمة المرور**: `Admin@2025`
+- **⚠️ ملاحظة**: هذه هي كلمة المرور الحالية والفعالة في Production
 
 ### 3️⃣ نقل .env خارج الريبو ✅
 
@@ -72,7 +72,7 @@ Password: KT_Secure_DB_v2_2025_Qx9pLm8Rw3
 
 ```
 Email: admin@kitchentech.sa
-Password: KTAdmin@2025#Secure
+Password: Admin@2025
 URL: https://souqmatbakh.com/admin (أو /docs للـ API)
 ```
 

@@ -14,12 +14,14 @@
 ## ✨ المميزات
 
 ### 1. **نظام المصادقة (Authentication)**
+
 - ✅ تسجيل دخول آمن بـ JWT Token
 - ✅ تخزين Token بشكل آمن مع `flutter_secure_storage`
 - ✅ Auto-logout عند انتهاء الجلسة
 - ✅ حماية جميع صفحات الإدارة
 
 ### 2. **إدارة الطلبات (Quote Management)**
+
 - ✅ عرض جميع طلبات العملاء
 - ✅ تصفية حسب الحالة (Status):
   - 🆕 جديد (New)
@@ -33,6 +35,7 @@
 - ✅ نسخ رقم الجوال بضغطة واحدة
 
 ### 3. **الإحصائيات والتحليلات (Analytics)**
+
 - 📊 إجمالي الطلبات
 - 📈 التوزيع حسب نوع المطبخ (مودرن، كلاسيك، خشب، ألمنيوم)
 - 📍 التوزيع حسب المدينة
@@ -40,6 +43,7 @@
 - 📉 التوزيع حسب الحالة مع نسب مئوية
 
 ### 4. **واجهة المستخدم (UI/UX)**
+
 - ✅ دعم كامل للغة العربية RTL
 - ✅ Material Design 3
 - ✅ Pull-to-refresh على جميع الصفحات
@@ -73,8 +77,8 @@ backend/
 dependencies:
   flutter:
     sdk: flutter
-  http: ^1.1.0                      # API requests
-  flutter_secure_storage: ^9.0.0   # Secure token storage
+  http: ^1.1.0 # API requests
+  flutter_secure_storage: ^9.0.0 # Secure token storage
 ```
 
 ## 🚀 التشغيل
@@ -105,6 +109,7 @@ Password: Admin@2025
 **الموقع:** `lib/admin/admin_login_page.dart`
 
 **المميزات:**
+
 - نموذج تسجيل دخول مع validation
 - Toggle لإظهار/إخفاء كلمة المرور
 - رسائل خطأ واضحة بالعربية
@@ -112,6 +117,7 @@ Password: Admin@2025
 - تصميم Material Card مع gradient
 
 **الاستخدام:**
+
 ```dart
 Navigator.push(
   context,
@@ -124,6 +130,7 @@ Navigator.push(
 **الموقع:** `lib/admin/admin_dashboard_page.dart`
 
 **المميزات:**
+
 - عرض قائمة الطلبات في Cards
 - فلاتر سريعة (FilterChips) لتصفية الطلبات
 - Pull-to-refresh
@@ -132,6 +139,7 @@ Navigator.push(
 - قائمة logout
 
 **Code Example:**
+
 ```dart
 // Navigate to Dashboard
 Navigator.pushReplacement(
@@ -143,6 +151,7 @@ Navigator.pushReplacement(
 ```
 
 **Filter Options:**
+
 ```dart
 final filters = ['all', 'new', 'contacted', 'quoted', 'converted', 'lost'];
 ```
@@ -152,6 +161,7 @@ final filters = ['all', 'new', 'contacted', 'quoted', 'converted', 'lost'];
 **الموقع:** `lib/admin/quote_details_page.dart`
 
 **المميزات:**
+
 - عرض معلومات العميل كاملة
 - تحديث الحالة مع ChoiceChips
 - إضافة/تعديل ملاحظات داخلية
@@ -160,6 +170,7 @@ final filters = ['all', 'new', 'contacted', 'quoted', 'converted', 'lost'];
 - حفظ التغييرات
 
 **الاستخدام:**
+
 ```dart
 Navigator.push(
   context,
@@ -170,6 +181,7 @@ Navigator.push(
 ```
 
 **Status Colors:**
+
 ```dart
 Color getStatusColor(String status) {
   switch (status) {
@@ -187,6 +199,7 @@ Color getStatusColor(String status) {
 **الموقع:** `lib/admin/analytics_page.dart`
 
 **المميزات:**
+
 - بطاقة إجمالي الطلبات
 - توزيع حسب نوع المطبخ مع نسب مئوية
 - توزيع حسب المدينة مع رسوم بيانية
@@ -194,6 +207,7 @@ Color getStatusColor(String status) {
 - معدل التحويل (Conversion Rate)
 
 **الاستخدام:**
+
 ```dart
 Navigator.push(
   context,
@@ -247,6 +261,7 @@ async def get_quote_requests(
 ### AdminService Methods:
 
 #### 1. تسجيل الدخول:
+
 ```dart
 final response = await AdminService.login(
   email: 'admin@kitchentech.sa',
@@ -256,6 +271,7 @@ final response = await AdminService.login(
 ```
 
 #### 2. جلب الطلبات:
+
 ```dart
 final quotes = await AdminService.fetchAllQuotes(
   status: 'new',        // Optional filter
@@ -267,11 +283,13 @@ final quotes = await AdminService.fetchAllQuotes(
 ```
 
 #### 3. جلب طلب واحد:
+
 ```dart
 final quote = await AdminService.fetchQuoteById(1);
 ```
 
 #### 4. تحديث الحالة:
+
 ```dart
 final updated = await AdminService.updateQuoteStatus(
   id: 1,
@@ -281,11 +299,13 @@ final updated = await AdminService.updateQuoteStatus(
 ```
 
 #### 5. حذف طلب:
+
 ```dart
 await AdminService.deleteQuote(1);
 ```
 
 #### 6. جلب الإحصائيات:
+
 ```dart
 final stats = await AdminService.fetchStats();
 // Returns:
@@ -299,14 +319,14 @@ final stats = await AdminService.fetchStats();
 
 ### API Endpoints:
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | `/api/v1/auth/login` | ❌ | تسجيل الدخول |
-| GET | `/api/v1/quotes/` | ✅ | قائمة الطلبات |
-| GET | `/api/v1/quotes/stats` | ✅ | الإحصائيات |
-| GET | `/api/v1/quotes/{id}` | ✅ | تفاصيل طلب |
-| PATCH | `/api/v1/quotes/{id}/status` | ✅ | تحديث الحالة |
-| DELETE | `/api/v1/quotes/{id}` | ✅ | حذف طلب |
+| Method | Endpoint                     | Auth | Description   |
+| ------ | ---------------------------- | ---- | ------------- |
+| POST   | `/api/v1/auth/login`         | ❌   | تسجيل الدخول  |
+| GET    | `/api/v1/quotes/`            | ✅   | قائمة الطلبات |
+| GET    | `/api/v1/quotes/stats`       | ✅   | الإحصائيات    |
+| GET    | `/api/v1/quotes/{id}`        | ✅   | تفاصيل طلب    |
+| PATCH  | `/api/v1/quotes/{id}/status` | ✅   | تحديث الحالة  |
+| DELETE | `/api/v1/quotes/{id}`        | ✅   | حذف طلب       |
 
 ## 🎨 التخصيص (Customization)
 
@@ -345,6 +365,7 @@ final _filterOptions = [
 ## 🐛 معالجة الأخطاء (Error Handling)
 
 ### AdminAuthException:
+
 ```dart
 try {
   await AdminService.login(email: email, password: password);
@@ -357,6 +378,7 @@ try {
 ```
 
 ### AdminApiException:
+
 ```dart
 try {
   await AdminService.fetchAllQuotes();
@@ -388,6 +410,7 @@ try {
 ```
 
 **المعالجة في Flutter:**
+
 ```dart
 // تنظيف Enum values
 final cleanStatus = status.replaceAll('QuoteRequestStatus.', '').toLowerCase();
@@ -397,6 +420,7 @@ final cleanStyle = style.replaceAll('KitchenStyle.', '').toLowerCase();
 ## 🧪 الاختبار (Testing)
 
 ### 1. اختبار تسجيل الدخول:
+
 ```bash
 # في PowerShell
 Invoke-RestMethod -Uri "https://souqmatbakh.com/api/v1/auth/login" `
@@ -406,6 +430,7 @@ Invoke-RestMethod -Uri "https://souqmatbakh.com/api/v1/auth/login" `
 ```
 
 ### 2. اختبار الوصول للطلبات:
+
 ```bash
 $token = "YOUR_TOKEN_HERE"
 $headers = @{Authorization="Bearer $token"}
@@ -415,16 +440,19 @@ Invoke-RestMethod -Uri "https://souqmatbakh.com/api/v1/quotes/" -Headers $header
 ## 📝 Notes & Tips
 
 ### Performance:
+
 - استخدم `const` constructors حيث أمكن
 - استخدم `ListView.builder` للقوائم الطويلة
 - قم بـ caching للـ stats data
 
 ### Security:
+
 - لا تشارك Token في logs
 - استخدم HTTPS فقط
 - قم بتحديث كلمة المرور بانتظام
 
 ### UX:
+
 - أضف loading indicators واضحة
 - استخدم Snackbars للتنبيهات
 - أضف empty states للقوائم الفارغة

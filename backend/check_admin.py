@@ -9,7 +9,7 @@ db = SessionLocal()
 
 try:
     # Check if admin exists
-    admin = db.query(User).filter(User.email == 'admin@souqmatbakh.com').first()
+    admin = db.query(User).filter(User.email == 'admin@kitchentech.sa').first()
     
     if not admin:
         admin = db.query(User).filter(User.username == 'admin').first()
@@ -34,7 +34,7 @@ try:
         
         # Create admin user
         admin_user = User(
-            email='admin@souqmatbakh.com',
+            email='admin@kitchentech.sa',
             username='admin',
             hashed_password=get_password_hash('Admin@2025'),
             full_name='Admin User',
@@ -48,7 +48,7 @@ try:
         db.refresh(admin_user)
         
         print("✅ Admin user created successfully!")
-        print(f"   Email: admin@souqmatbakh.com")
+        print(f"   Email: admin@kitchentech.sa")
         print(f"   Password: Admin@2025")
         print(f"   Username: admin")
         
