@@ -447,6 +447,7 @@ sudo systemctl daemon-reload
 ```
 
 ---
+
 ## 🛡️ Rate Limiting & Abuse Protection
 
 ### Overview
@@ -465,6 +466,7 @@ Production-grade rate limiting is implemented at **two layers** for defense in d
 - **Status Code**: HTTP 429 (Too Many Requests)
 
 Configured in:
+
 - `/etc/nginx/nginx.conf` - Rate limiting zones
 - `/etc/nginx/sites-available/souqmatbakh.com.conf` - Applied limits
 
@@ -573,6 +575,7 @@ map $limit $limit_key {
 - **Reversible**: Can be adjusted or removed without code changes
 
 ---
+
 ## �📞 Troubleshooting
 
 ### Backend won't start
