@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     APP_VERSION: str = "1.0.0"
     APP_ENV: str = "dev"  # dev or prod
     
+    # Optional fields (ignore if not needed)
+    DEBUG: Optional[str] = None
+    
     # Database - MUST be set via environment variable KT_DATABASE_URL
     DATABASE_URL: str = Field(validation_alias="KT_DATABASE_URL")
     
@@ -30,6 +33,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         case_sensitive = True
+        extra = "ignore"  # Ignore extra fields from .env file
     
     @property
     def DEBUG(self) -> bool:
