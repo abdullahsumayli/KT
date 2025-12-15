@@ -211,13 +211,13 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xFF6DA5A2), Color(0xFF414E56)],
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
         ),
-        borderRadius: const BorderRadius.only(
+        borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
         ),
@@ -225,9 +225,9 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
       child: Column(
         children: [
           // العنوان الرئيسي
-          Text(
+          const Text(
             'فصّل مطبخ أحلامك! 🏠',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
               color: Colors.white,
@@ -313,7 +313,7 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
   /// بناء قائمة المدن المنسدلة
   Widget _buildCityDropdown() {
     return DropdownButtonFormField<String>(
-      value: _selectedCity,
+      initialValue: _selectedCity,
       decoration: InputDecoration(
         hintText: 'اختر المدينة',
         prefixIcon: const Icon(Icons.location_city, color: Colors.blue),
@@ -413,11 +413,11 @@ class _QuoteRequestFormState extends State<QuoteRequestForm> {
       child: ElevatedButton(
         onPressed: _isLoading ? null : _submitForm,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFF6DA5A2),
+          backgroundColor: const Color(0xFF6DA5A2),
           foregroundColor: Colors.white,
           disabledBackgroundColor: Colors.grey[300],
           elevation: _isLoading ? 0 : 4,
-          shadowColor: Color(0xFF6DA5A2).withOpacity(0.5),
+          shadowColor: const Color(0xFF6DA5A2).withOpacity(0.5),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
         child: _isLoading

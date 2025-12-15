@@ -17,11 +17,11 @@ class AIAssistantCard extends StatelessWidget {
         width: double.infinity,
         child: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               colors: [
-                const Color(0xFF6DA5A2),
-                const Color(0xFF5A8D8A),
-                const Color(0xFF414E56),
+                Color(0xFF81C784),
+                Color(0xFF66BB6A),
+                Color(0xFF4CAF50),
               ],
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
