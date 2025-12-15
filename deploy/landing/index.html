@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="سوق المطابخ - منصة تجمع أفضل مصانع وشركات المطابخ في السعودية">
+    <meta name="theme-color" content="#6DA5A2">
+    <title>سوق المطابخ - احصل على 3 عروض أسعار مجاناً</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6DA5A2 0%, #5A8D8A 50%, #414E56 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6DA5A2, #5A8D8A);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 16px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: bold;
+            color: #6DA5A2;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .features {
+            margin-bottom: 30px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: start;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: transform 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateX(-5px);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #6DA5A2, #5A8D8A);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+
+        .feature-text h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .feature-text p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .cta-text {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #6DA5A2, #5A8D8A);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(109, 165, 162, 0.4);
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(109, 165, 162, 0.5);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #6DA5A2, #5A8D8A);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .header p {
+                font-size: 16px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-button {
+                padding: 15px 30px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">س م</div>
+            <h1>سوق المطابخ</h1>
+            <p>منصتك الأولى لتصاميم المطابخ في السعودية</p>
+        </div>
+
+        <div class="content">
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">شركة ومصنع</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">عروض أسعار مجاناً</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">24</div>
+                    <div class="stat-label">ساعة رد سريع</div>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🎨</div>
+                    <div class="feature-text">
+                        <h3>تصاميم متنوعة</h3>
+                        <p>مودرن، كلاسيك، اقتصادية وفاخرة - كل ما تحتاجه في مكان واحد</p>
+                    </div>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">💰</div>
+                    <div class="feature-text">
+                        <h3>احصل على 3 عروض</h3>
+                        <p>قارن بين عروض أسعار مختلفة من أفضل المصانع واختر الأنسب</p>
+                    </div>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-text">
+                        <h3>سريع ومضمون</h3>
+                        <p>رد خلال 24 ساعة من شركات موثوقة ومعتمدة</p>
+                    </div>
+                </div>
+
+                <div class="feature">
+                    <div class="feature-icon">🛡️</div>
+                    <div class="feature-text">
+                        <h3>حماية كاملة</h3>
+                        <p>جميع الشركات معتمدة ومراجعة من قبل عملاء حقيقيين</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <p class="cta-text">جاهز لتصميم مطبخ أحلامك؟</p>
+                <a href="/" class="cta-button">ابدأ الآن مجاناً ←</a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 سوق المطابخ - SouqMatbakh.com</p>
+            <p style="margin-top: 5px; font-size: 12px;">جميع الحقوق محفوظة</p>
+        </div>
+    </div>
+</body>
+</html>
