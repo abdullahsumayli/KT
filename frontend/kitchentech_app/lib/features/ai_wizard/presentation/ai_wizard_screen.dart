@@ -87,7 +87,7 @@ class _AiWizardScreenState extends State<AiWizardScreen> {
               fit: BoxFit.contain,
               errorBuilder: (context, error, stackTrace) {
                 return Image.asset(
-                  'assets/images/logosouq.png',
+                  'assets/images/logo.png',
                   height: 28,
                   fit: BoxFit.contain,
                 );

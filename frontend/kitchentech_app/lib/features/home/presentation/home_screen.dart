@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) {
                   return Image.asset(
-                    'assets/images/logosouq.png',
+                    'assets/images/logo.png',
                     height: 50,
                     fit: BoxFit.contain,
                   );
@@ -928,7 +928,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) {
                     return Image.asset(
-                      'assets/images/logosouq.png',
+                      'assets/images/logo.png',
                       height: 32,
                       fit: BoxFit.contain,
                     );
