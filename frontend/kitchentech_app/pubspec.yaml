@@ -1,5 +1,5 @@
 name: kitchentech_app
-description: "KitchenTech - Platform for renting commercial kitchens"
+description: "SouqMatbakh.com - سوق المطابخ - منصة تصاميم المطابخ في السعودية"
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -60,6 +60,7 @@ flutter:
   
   assets:
     - assets/images/
+    - assets/brand/
   
   # fonts:
   #   - family: Schyler

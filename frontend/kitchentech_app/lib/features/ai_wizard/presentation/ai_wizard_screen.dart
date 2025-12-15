@@ -82,9 +82,16 @@ class _AiWizardScreenState extends State<AiWizardScreen> {
             const Text('مساعد الذكاء الاصطناعي'),
             const SizedBox(width: 8),
             Image.asset(
-              'assets/images/logo.png',
+              'assets/brand/logo_mark.png',
               height: 28,
               fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return Image.asset(
+                  'assets/images/logosouq.png',
+                  height: 28,
+                  fit: BoxFit.contain,
+                );
+              },
             ),
           ],
         ),

@@ -19,9 +19,9 @@ class AIAssistantCard extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                const Color(0xFF6A1B9A).withValues(alpha: 0.85),
-                const Color(0xFF8E24AA).withValues(alpha: 0.85),
-                const Color(0xFFAB47BC).withValues(alpha: 0.85),
+                const Color(0xFF6DA5A2),
+                const Color(0xFF5A8D8A),
+                const Color(0xFF414E56),
               ],
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
@@ -60,7 +60,7 @@ class AIAssistantCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           const Text(
-                            'مساعد KitchenTech الذكي',
+                            'مساعد سوق المطابخ الذكي',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 17,

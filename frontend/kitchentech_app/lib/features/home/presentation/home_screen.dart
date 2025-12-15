@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../shared/widgets/shared_widgets.dart';
+import '../../../widgets/quote_request_form.dart';
 import '../../shared/data/models/kitchen_ad.dart';
 import '../../shared/data/repositories/kitchen_ads_repository.dart';
 
@@ -60,6 +61,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   const SizedBox(height: 48),
 
+                  // نموذج طلب عروض الأسعار (Quote Request Form) - مكون تحويل الزوار
+                  _buildQuoteRequestSection(isWide),
+
+                  const SizedBox(height: 24),
+
+                  // زر ثانوي: تصفح الكتالوج (Plan B)
+                  _buildBrowseCatalogButton(theme),
+
+                  const SizedBox(height: 48),
+
                   // أقسام رئيسية (Categories)
                   _buildCategoriesSection(theme, isWide),
 
@@ -103,17 +114,24 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                'assets/images/logo.png',
+                'assets/brand/logo_horizontal.png',
                 height: 50,
                 fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'assets/images/logosouq.png',
+                    height: 50,
+                    fit: BoxFit.contain,
+                  );
+                },
               ),
               const SizedBox(width: 12),
               const Text(
-                'Kitchen Tech',
+                'سوق المطابخ',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF2962FF),
+                  color: Color(0xFF6DA5A2),
                 ),
               ),
             ],
@@ -132,14 +150,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
           const Spacer(),
 
-          // قائمة مختصرة
+          // قائمة مختصرة - التركيز على العميل
           if (isWide) ...[
-            TextButton.icon(
-              onPressed: () => context.go('/kitchens'),
-              icon: const Icon(Icons.category_outlined),
-              label: const Text('تصفّح الأقسام'),
-            ),
-            const SizedBox(width: 8),
             TextButton.icon(
               onPressed: () => context.go('/auth/login'),
               icon: const Icon(Icons.login),
@@ -150,21 +162,17 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () => context.go('/auth/register'),
               child: const Text('إنشاء حساب'),
             ),
-            const SizedBox(width: 8),
-          ],
-
-          // زر "أضف إعلانك" (للمعلنين)
-          ElevatedButton.icon(
-            onPressed: () => context.go('/dashboard/new-ad'),
-            icon: const Icon(Icons.add_business),
-            label: const Text('أضف إعلانك'),
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              backgroundColor: const Color(0xFFFFC857),
-              foregroundColor: Colors.black,
-              elevation: 0,
+            const SizedBox(width: 16),
+            // خيار ثانوي للموردين (منفصل ومحايد)
+            TextButton.icon(
+              onPressed: () => context.go('/dashboard/new-ad'),
+              icon: const Icon(Icons.store_outlined, size: 18),
+              label: const Text('بوابة الموردين'),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.grey.shade600,
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );
@@ -257,40 +265,53 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 24),
           ],
 
-          // زرّين
-          Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () => context.go('/kitchens'),
-                icon: const Icon(Icons.search, size: 24),
-                label: const Text('استعرض المطابخ', style: TextStyle(fontSize: 18)),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                  backgroundColor: theme.colorScheme.primary,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-              OutlinedButton.icon(
-                onPressed: () => context.go('/auth/register'),
-                icon: const Icon(Icons.business, size: 24),
-                label: const Text('سجّل كمورّد مطابخ', style: TextStyle(fontSize: 18)),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                  side: BorderSide(color: theme.colorScheme.primary, width: 2),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ],
+          // نص توجيهي بسيط
+          Text(
+            'أو يمكنك تصفح كتالوج التصاميم الجاهزة 👇',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade600,
+              height: 1.5,
+            ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// قسم نموذج طلب عروض الأسعار (Lead Generation)
+  Widget _buildQuoteRequestSection(bool isWide) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: isWide ? 80 : 20),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 800),
+        child: const QuoteRequestForm(),
+      ),
+    );
+  }
+
+  /// زر ثانوي: تصفح الكتالوج (Plan B - خيار بديل)
+  Widget _buildBrowseCatalogButton(ThemeData theme) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: OutlinedButton.icon(
+          onPressed: () => context.go('/kitchens'),
+          icon: const Icon(Icons.search, size: 20),
+          label: const Text(
+            'أو تصفح الكتالوج بالكامل',
+            style: TextStyle(fontSize: 16),
+          ),
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            side: BorderSide(color: Colors.grey.shade400, width: 1.5),
+            foregroundColor: Colors.grey.shade700,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -902,14 +923,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Image.asset(
-                  'assets/images/logo.png',
+                  'assets/brand/logo_mark.png',
                   height: 32,
                   fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      'assets/images/logosouq.png',
+                      height: 32,
+                      fit: BoxFit.contain,
+                    );
+                  },
                 ),
               ),
               const SizedBox(width: 16),
               const Text(
-                'Kitchen Tech',
+                'سوق المطابخ',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -945,9 +973,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
           const SizedBox(height: 32),
 
+          // رابط خاص للموردين (B2B)
+          Container(
+            margin: const EdgeInsets.only(bottom: 24),
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey.shade700),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: InkWell(
+              onTap: () {
+                context.go('/dashboard/new-ad');
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.business_center, color: Colors.grey.shade400, size: 20),
+                  const SizedBox(width: 12),
+                  Text(
+                    'هل أنت مورد؟ سجّل الآن في بوابة الموردين',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey.shade400,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
           // حقوق النشر
           Text(
-            '© 2025 Kitchen Tech. جميع الحقوق محفوظة.',
+            '© 2025 SouqMatbakh.com - سوق المطابخ. جميع الحقوق محفوظة.',
             style: TextStyle(
               fontSize: 13,
               color: Colors.grey.shade600,

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   // Colors
-  static const Color primaryBlue = Color(0xFF2962FF);
-  static const Color secondaryGold = Color(0xFFFFC857);
+  static const Color primaryTeal = Color(0xFF6DA5A2);
+  static const Color secondaryDarkBlue = Color(0xFF414E56);
   static const Color backgroundLight = Color(0xFFF5F5F5);
   static const Color surfaceWhite = Color(0xFFFFFFFF);
   static const Color textPrimary = Color(0xFF1A1A1A);
@@ -13,9 +13,9 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     colorScheme: ColorScheme.fromSeed(
-      seedColor: primaryBlue,
-      primary: primaryBlue,
-      secondary: secondaryGold,
+      seedColor: primaryTeal,
+      primary: primaryTeal,
+      secondary: secondaryDarkBlue,
       surface: surfaceWhite,
       brightness: Brightness.light,
     ),
@@ -127,7 +127,7 @@ class AppTheme {
     // Button themes
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: primaryBlue,
+        backgroundColor: primaryTeal,
         foregroundColor: Colors.white,
         elevation: 2,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
@@ -143,12 +143,12 @@ class AppTheme {
 
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: primaryBlue,
+        foregroundColor: primaryTeal,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        side: const BorderSide(color: primaryBlue, width: 1.5),
+        side: const BorderSide(color: primaryTeal, width: 1.5),
         textStyle: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
@@ -171,7 +171,7 @@ class AppTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: primaryBlue, width: 2),
+        borderSide: const BorderSide(color: primaryTeal, width: 2),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
@@ -211,7 +211,7 @@ class AppTheme {
     // Chip theme
     chipTheme: ChipThemeData(
       backgroundColor: surfaceWhite,
-      selectedColor: primaryBlue.withValues(alpha: 0.1),
+      selectedColor: primaryTeal.withValues(alpha: 0.1),
       labelStyle: const TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w500,

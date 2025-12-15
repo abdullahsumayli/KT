@@ -76,10 +76,18 @@ class KitchenCard extends StatelessWidget {
                         child: imageUrl == null
                             ? Center(
                                 child: Image.asset(
-                                  'assets/images/logo.png',
+                                  'assets/brand/logo_mark.png',
                                   width: 70,
                                   height: 70,
                                   fit: BoxFit.contain,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(
+                                      'assets/images/logosouq.png',
+                                      width: 70,
+                                      height: 70,
+                                      fit: BoxFit.contain,
+                                    );
+                                  },
                                 ),
                               )
                             : null,
